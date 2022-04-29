@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class User {
     @Id @GeneratedValue
-    private Long id; // 회원 id
+    private Long id; //  id
 
     @Column(nullable = false)
     private String name; //이름
@@ -29,6 +29,10 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @Column(name = "provider_type")
+    @Enumerated(EnumType.STRING)
+    private ProviderType providerType;
+
     @Column(nullable = false)
     private Boolean is_subscribed; //구독여부
 
@@ -37,21 +41,6 @@ public class User {
     private LocalDateTime create_time; //생성일
     private LocalDateTime update_time; //수정일
 
-    @Builder
-    public User(String name, String email, Role role) {
-        this.name = name;
-        this.email = email;
-        this.role = role;
-    }
-
-    public User update(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public String getRoleKey() {
-        return this.role.getKey();
-    }
 
 
 
