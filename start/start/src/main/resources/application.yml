@@ -6,14 +6,17 @@ spring:
           google:
             client-id: 920551120026-0k90vj5li039ut6536gd911op9q8rpc8.apps.googleusercontent.com
             client-secret: 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
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
             scope:
               - name
               - email
           naver:
             client-id: ptAfyD4K7h8mTses1X0C
             client-secret: MZnOecq4qc
+            client-authentication-method: post
             redirect-uri:  http://localhost:8080/login/oauth2/code/naver
             authorization-grant-type: authorization_code
+            client-name: Naver
             scope:
               - name
               - email
