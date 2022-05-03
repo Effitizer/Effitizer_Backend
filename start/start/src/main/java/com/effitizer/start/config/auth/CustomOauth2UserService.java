@@ -26,6 +26,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        log.info("--- CustomOauth2UserService - / ----------------------------------------- "+userRequest);
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
@@ -38,7 +39,8 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
         User user = saveOrUpdate(attributes);
         httpSession.setAttribute("user", new SessionUser(user));
-
+        log.info("--- CustomOauth2UserService - / ----------------------------------------- "+registrationId);
+        log.info("--- CustomOauth2UserService - / ----------------------------------------- "+userNameAttributeName);
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
@@ -49,7 +51,8 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         User user = userRepository.findByEmail(attributes.getEmail())
                 .map(entity -> entity.update(attributes.getName()))
                 .orElse(attributes.toEntity());
-        log.info("--- login controller - / -----------------------------------------"+attributes.getEmail());
+
+        log.info("--- login controller - / ----------------------------------------- "+attributes.getEmail());
         return userRepository.save(user);
     }
 }
