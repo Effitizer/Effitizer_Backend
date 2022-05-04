@@ -39,7 +39,6 @@ public class OAuthAttributes {
     }
 
     private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
-        // JSON형태이기 떄문에 Map을 통해서 데이터를 가져온다.
         Map<String, Object> response = (Map<String, Object>)attributes.get("response");
         log.info("--- OAuthAttributes - / -------------------- "+ attributes);
         return OAuthAttributes.builder()

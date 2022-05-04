@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-public class User{
+public class User extends BaseTimeEntity{
     @Id @GeneratedValue
     private Long id; //  id
 
@@ -23,22 +23,12 @@ public class User{
     @Column(nullable = false)
     private String email; //이메일
 
-    //@Column(nullable = false)
-    //private String nickname; //닉이름
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
     @Column(nullable = false)
     private Boolean is_subscribed = false; //구독여부
-
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime create_time; //생성일
-
-    @LastModifiedBy
-    private LocalDateTime update_time; //수정일
 
     @Builder
     public User(String name, String email, Role role){
