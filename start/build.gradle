@@ -47,6 +47,10 @@ dependencies {
 	//swagger
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
+	// S3 Bucket
+	compile 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'com.amazonaws:aws-java-sdk:1.11.404'
 }
 
 tasks.named('test') {
