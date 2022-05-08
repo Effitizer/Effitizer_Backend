@@ -31,6 +31,7 @@ public class S3Uploader {
     private String bucket;
 
     public Contentsfile upload(Long contentsId, MultipartFile multipartFile, String dirName) throws IOException {
+        log.info("파일 확인"+ multipartFile.toString());
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
         return upload(contentsId, uploadFile, dirName);

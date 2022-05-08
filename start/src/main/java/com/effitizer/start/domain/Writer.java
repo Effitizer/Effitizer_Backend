@@ -17,5 +17,5 @@ public class Writer extends BaseTimeEntity{
     @GeneratedValue
     private Long id; //  id
 
-    private String name // 작가 이름
+    private String name; // 작가 이름
 }

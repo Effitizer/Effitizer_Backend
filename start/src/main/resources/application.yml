@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://localhost:3306/effitizer?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/effitizer?serverTimezone=Asia/Seoul
     password: ''
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
@@ -10,7 +10,15 @@ spring:
     hibernate:
       ddl-auto: create
   profiles:
-    include: oauth
+    include:
+      - oauth
+      - aws
+      - credentials
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
 logging:
   level:
     org:
