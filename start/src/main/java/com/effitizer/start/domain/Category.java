@@ -16,6 +16,7 @@ public class Category extends BaseTimeEntity{
     @Id
     @GeneratedValue
     private Long id; //  id
+    private String name; // name
 
-    private String name;
+
 }

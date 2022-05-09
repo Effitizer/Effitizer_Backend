@@ -52,6 +52,10 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'com.amazonaws:aws-java-sdk:1.11.404'
 	implementation 'com.amazonaws:aws-java-sdk-s3'
+
+	// json
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.12.3'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
 }
 
 tasks.named('test') {

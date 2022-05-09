@@ -2,9 +2,10 @@ package com.effitizer.start.controller;
 
 import com.effitizer.start.aws.S3Uploader;
 import com.effitizer.start.common.ApiResult;
+import com.effitizer.start.common.ApiUtils;
 import com.effitizer.start.domain.Contents;
 import com.effitizer.start.domain.Contentsfile;
-import com.effitizer.start.domain.dto.ContentsDTO;
+import com.effitizer.start.domain.dto.Contents.ContentsDTO;
 import com.effitizer.start.service.ContentsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-import static com.effitizer.start.common.ApiResult.OK;
 
 @Slf4j
 @Controller
@@ -30,7 +30,7 @@ public class ContentController {
     @PostMapping("api/contents/new")
     public ApiResult<Contents> save(@RequestBody ContentsDTO contentsdto)
     {
-        return OK(contentsService.save(new Contents(contentsdto)));
+        return ApiUtils.success(contentsService.save(new Contents(contentsdto)));
     }
 
     // s3 업로드 테스트
