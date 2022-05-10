@@ -15,4 +15,8 @@ public class ContentsService {
         contentsRepository.save(contents);
         return contents;
     }
+
+    public Contents saveContents() {
+
+    }
 }
