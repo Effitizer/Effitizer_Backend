@@ -9,10 +9,10 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class Contentsfile extends BaseTimeEntity {
     @Id
     @GeneratedValue
+    @Column(name = "contentsfile_id")
     private Long id; //  id
 
     @ManyToOne(fetch = FetchType.LAZY)

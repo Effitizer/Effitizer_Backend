@@ -17,15 +17,15 @@ public class Book extends BaseTimeEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
-    private Publisher publisher_id; //출판사 id
+    private Publisher publisher; //출판사 id
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
-    private Writer writer_id; //작가 id
+    private Writer writer; //작가 id
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
-    private Category category_id; //카테고리 id
+    private Category category; //카테고리 id
 
     private String title; //제목
 }

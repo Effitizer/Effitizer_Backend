@@ -11,10 +11,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class Contents extends BaseTimeEntity{
     @Id
     @GeneratedValue
+    @Column(name = "contents_id")
     public Long id; //  id
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,19 +25,31 @@ public class Contents extends BaseTimeEntity{
     @JoinColumn(name = "book_id")
     public Book book; //책 id
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    public Group group; //책 id
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
-    private Group group;
-
     public String title; // 제목
     public String content; // 내용
-    public Long view; // 조회수
+    private Long view; // 조회수
+    private String isbn; // 국제표준도서번호
 
     @OneToMany(mappedBy = "contents", cascade = CascadeType.ALL)
-    public List<Contentsfile> contentsfiles = new ArrayList<>();
+    private List<Contentsfile> contentsfiles = new ArrayList<>();
+
+    //==연관관계 메서드==//
+    public void setContetnsfile(Contentsfile contetnsfile) {
+        this.contentsfiles.add(contetnsfile);
+        contetnsfile.setContents(this);
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+        order.setContents(this);
+    }
 
 }
