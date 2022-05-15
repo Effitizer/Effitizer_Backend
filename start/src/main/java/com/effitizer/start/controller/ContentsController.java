@@ -2,7 +2,6 @@ package com.effitizer.start.controller;
 
 import com.effitizer.start.aws.S3Uploader;
 import com.effitizer.start.domain.Book;
-import com.effitizer.start.domain.Contents;
 import com.effitizer.start.domain.Contentsfile;
 import com.effitizer.start.domain.User;
 import com.effitizer.start.domain.dto.Contents.AllContentsDTO;
@@ -23,7 +22,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-
 @Slf4j
 @Controller
 public class ContentsController {
@@ -34,6 +32,7 @@ public class ContentsController {
 
     @PostMapping("api/contents/new")
     public ResponseEntity<?> saveContents(@RequestBody AllContentsRequest contentsRequest) {
+        log.info("Contents controller: api/contents/new ---------------------");
         LinkedList<ContentsRequest> contentsRequestLinkedList = new LinkedList<>();
         contentsRequestLinkedList.addAll(contentsRequest.getContents());
         Book book = bookService.saveBook(contentsRequest.getIsbn(), contentsRequest.getTitle(), contentsRequest.getWriter(), contentsRequest.getPublisher(), contentsRequest.getCategory_id());
@@ -41,7 +40,6 @@ public class ContentsController {
         List<ContentsDTO> contentsDTOList = contentsService.saveContents(contentsRequestLinkedList, user, book);
         AllContentsDTO allContentsDTO = new AllContentsDTO(book.getId(), book.getTitle(), book.getIsbn(), book.getWriter().getName(), book.getPublisher().getName(), contentsDTOList);
         return ResponseEntity.ok(allContentsDTO);
-
     }
 
     // s3 업로드 테스트
@@ -52,6 +50,4 @@ public class ContentsController {
         return ResponseEntity.ok(contentsfile);
     }
 
-
 }
-
