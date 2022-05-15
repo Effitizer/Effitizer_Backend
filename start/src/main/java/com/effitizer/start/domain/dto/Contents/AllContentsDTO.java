@@ -2,21 +2,19 @@ package com.effitizer.start.domain.dto.Contents;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
-@Getter @Setter
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-public class AllContentsRequest {
+public class AllContentsDTO {
+    private Long book_id;
     private String title;
     private String isbn;
     private String writer;
     private String publisher;
-    private Long category_id;
-    private Long user_id;
-    private List<ContentsRequest> contents;
+    private List<ContentsDTO> contents;
 
 }

@@ -22,7 +22,7 @@ public class BookService {
     @Autowired CategoryRepository categoryRepository;
 
 
-    public Book saveBook(String book_name, String writer_name, String publisher_name, Long category_id) {
+    public Book saveBook(String isbn, String title, String writer_name, String publisher_name, Long category_id) {
         // writer id 조회 -> 없으면 생성
         Writer writer = writerService.saveWriterOrFind(writer_name);
 
@@ -31,9 +31,11 @@ public class BookService {
 
         // 책 생성
         Book book = new Book();
-        book.setWriter_id(writer);
-        book.setPublisher_id(publisher);
-        book.setCategory_id(categoryRepository.findById(String.valueOf(category_id)).get());
+        book.setWriter(writer);
+        book.setPublisher(publisher);
+        book.setCategory(categoryRepository.findById(String.valueOf(category_id)).get());
+        book.setIsbn(isbn);
+        book.setTitle(title);
         bookRepository.save(book);
         return book;
     }

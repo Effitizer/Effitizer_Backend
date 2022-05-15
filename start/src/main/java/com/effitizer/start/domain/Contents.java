@@ -1,5 +1,6 @@
 package com.effitizer.start.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Contents extends BaseTimeEntity{
     @Id
     @GeneratedValue
@@ -40,6 +43,13 @@ public class Contents extends BaseTimeEntity{
 
     @OneToMany(mappedBy = "contents", cascade = CascadeType.ALL)
     private List<Contentsfile> contentsfiles = new ArrayList<>();
+
+    public Contents(User user, Book book, String title, String content) {
+        this.user = user;
+        this.book = book;
+        this.title = title;
+        this.content = content;
+    }
 
     //==연관관계 메서드==//
     public void setContetnsfile(Contentsfile contetnsfile) {

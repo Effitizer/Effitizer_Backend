@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class Book extends BaseTimeEntity{
     @Id
     @GeneratedValue
@@ -28,4 +27,8 @@ public class Book extends BaseTimeEntity{
     private Category category; //카테고리 id
 
     private String title; //제목
+    private String isbn;
+
+    //@OneToOne()
+    //private Contentsfile cover;
 }
