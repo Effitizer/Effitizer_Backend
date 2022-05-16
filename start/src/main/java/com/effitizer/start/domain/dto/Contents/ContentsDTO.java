@@ -23,17 +23,6 @@ public class ContentsDTO {
     private LocalDateTime updateDate;
     private ContentsBookDTO book;
 
-    public ContentsDTO(Contents contents,ContentsBookDTO contentsBookDTO) {
-        this.id = contents.getId();
-        this.user_id = contents.getUser().getId();
-        this.book_order = contents.getOrder().getOrder_num();
-        this.title = contents.getTitle();
-        this.content = contents.getContent();
-        this.imageURL = contents.getContentsfiles().toString();
-        this.updateDate = contents.getModifiedDate();
-        this.book = contentsBookDTO;
-    }
-
     public ContentsDTO(Contents contents) {
         this.id = contents.getId();
         this.user_id = contents.getUser().getId();
@@ -42,6 +31,6 @@ public class ContentsDTO {
         this.content = contents.getContent();
         this.imageURL = contents.getContentsfiles().toString();
         this.updateDate = contents.getModifiedDate();
+        this.book = new ContentsBookDTO(contents.getBook());
     }
-
 }

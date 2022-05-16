@@ -7,6 +7,7 @@ import com.effitizer.start.domain.dto.Contents.ContentsDTO;
 import com.effitizer.start.domain.dto.Contents.ContentsRequest;
 import com.effitizer.start.repository.ContentsRepository;
 import com.effitizer.start.repository.OrderRepository;
+import com.effitizer.start.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.List;
 @Transactional
 public class ContentsService {
     @Autowired ContentsRepository contentsRepository;
+    @Autowired UserRepository userRepository;
     @Autowired OrderService orderService;
     @Autowired S3Uploader s3Uploader;
 
@@ -27,6 +29,18 @@ public class ContentsService {
      */
     public Contents save(Contents contents) {
         contentsRepository.save(contents);
+        return contents;
+    }
+
+    /**
+     *  콘텐츠 수정
+     */
+    public Contents update(ContentsDTO contentsDTO) {
+        Contents contents = contentsRepository.getById(contentsDTO.getId());
+        User user = userRepository.getById(contentsDTO.getUser_id());
+        contents.setUser(user);
+        contents.setTitle(contentsDTO.getTitle());
+        contents.setContent(contentsDTO.getContent());
         return contents;
     }
 

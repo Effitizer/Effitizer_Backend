@@ -47,13 +47,24 @@ public class ContentsController {
         return ResponseEntity.ok(allContentsDTO);
     }
 
+    /**
+     * 콘텐츠 id로 콘텐츠 조회
+     */
     @GetMapping("api/contents/{contents_id}")
     public ResponseEntity<?> selectContents(@PathVariable("contents_id") Long contents_id) {
         log.info("Contents controller: api/contents/contents_id ---------------------");
         Contents contents = contentsService.findContensById(contents_id);
-        ContentsBookDTO contentsBookDTO = new ContentsBookDTO(contents.getBook());
-        ContentsDTO contentsDTO = new ContentsDTO(contents, contentsBookDTO);
-        return ResponseEntity.ok(contentsDTO);
+        return ResponseEntity.ok(new ContentsDTO(contents));
+    }
+    
+    /**
+     * 콘텐츠 수정
+     */
+    @PostMapping("api/contents/{contents_id}/edit")
+    public ResponseEntity<?> editOneContents(@PathVariable("contents_id") Long contents_id, @RequestBody ContentsDTO contentsDTO) {
+        log.info("Contents controller: api/contents/{contents_id}/edit ---------------------");
+        Contents contents = contentsService.update(contentsDTO);
+        return ResponseEntity.ok(new ContentsDTO(contents));
     }
 
     // s3 업로드 테스트
