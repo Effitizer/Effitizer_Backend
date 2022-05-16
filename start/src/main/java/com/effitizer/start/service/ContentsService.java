@@ -22,10 +22,20 @@ public class ContentsService {
     @Autowired OrderService orderService;
     @Autowired S3Uploader s3Uploader;
 
-
+    /**
+     * 콘텐츠 저장
+     */
     public Contents save(Contents contents) {
         contentsRepository.save(contents);
         return contents;
+    }
+
+    /**
+     *  콘텐츠 id로 검색
+     */
+    public Contents findContensById(Long contents_id) {
+        return contentsRepository.findById(contents_id)
+                .orElse(null);
     }
 
     public List<ContentsDTO> saveContents(LinkedList<ContentsRequest> contentsRequestLinkedList, User user, Book book) {
@@ -42,7 +52,7 @@ public class ContentsService {
             Order order = orderService.saveOrder(contents, contentsRequest.getOrder());
 
             //DTO 생성
-            ContentsDTO contentsDTO = new ContentsDTO(contents.getId(), contents.getUser().getId(), order.getOrder_num(), contents.getTitle(), contents.getContent(), book.getCategory().getName(), contentsfile.getPath());
+            ContentsDTO contentsDTO = new ContentsDTO(contents);
             contentsDTOArrayList.add(contentsDTO);
         }
         return contentsDTOArrayList;

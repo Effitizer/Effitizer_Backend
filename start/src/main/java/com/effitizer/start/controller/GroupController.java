@@ -23,10 +23,14 @@ public class GroupController {
     @Autowired
     GroupService groupService;
 
-    @GetMapping("/api/category/new")
-    public ResponseEntity<List<?>> sendCategoryList() {
+    /**
+     *
+     * @return
+     */
+    @GetMapping("/api/content")
+    public ResponseEntity<List<?>> sendAllGroupList() {
         try {
-            log.info("Category controller: /api/category ---------------------");
+            log.info("Group controller: /api/content ---------------------");
             List<Group> groupList= groupService.findAllGroupList();
             List<AllGroupDTO> allGroupDTOList = new ArrayList<>();
             for(int i=0; i<=groupList.size(); i++) {

@@ -2,9 +2,11 @@ package com.effitizer.start.controller;
 
 import com.effitizer.start.aws.S3Uploader;
 import com.effitizer.start.domain.Book;
+import com.effitizer.start.domain.Contents;
 import com.effitizer.start.domain.Contentsfile;
 import com.effitizer.start.domain.User;
 import com.effitizer.start.domain.dto.Contents.AllContentsDTO;
+import com.effitizer.start.domain.dto.Contents.Book.ContentsBookDTO;
 import com.effitizer.start.domain.dto.Contents.ContentsDTO;
 import com.effitizer.start.domain.dto.Contents.ContentsRequest;
 import com.effitizer.start.domain.dto.Contents.AllContentsRequest;
@@ -30,16 +32,28 @@ public class ContentsController {
     @Autowired UserService userService;
     @Autowired S3Uploader s3Uploader;
 
+    /**
+     * 콘텐츠 저장
+     */
     @PostMapping("api/contents/new")
     public ResponseEntity<?> saveContents(@RequestBody AllContentsRequest contentsRequest) {
         log.info("Contents controller: api/contents/new ---------------------");
         LinkedList<ContentsRequest> contentsRequestLinkedList = new LinkedList<>();
         contentsRequestLinkedList.addAll(contentsRequest.getContents());
         Book book = bookService.saveBook(contentsRequest.getIsbn(), contentsRequest.getTitle(), contentsRequest.getWriter(), contentsRequest.getPublisher(), contentsRequest.getCategory_id());
-        User user = userService.findUserById(contentsRequest.getUser_id())
+        User user = userService.findUserById(contentsRequest.getUser_id());
         List<ContentsDTO> contentsDTOList = contentsService.saveContents(contentsRequestLinkedList, user, book);
         AllContentsDTO allContentsDTO = new AllContentsDTO(book.getId(), book.getTitle(), book.getIsbn(), book.getWriter().getName(), book.getPublisher().getName(), contentsDTOList);
         return ResponseEntity.ok(allContentsDTO);
+    }
+
+    @GetMapping("api/contents/{contents_id}")
+    public ResponseEntity<?> selectContents(@PathVariable("contents_id") Long contents_id) {
+        log.info("Contents controller: api/contents/contents_id ---------------------");
+        Contents contents = contentsService.findContensById(contents_id);
+        ContentsBookDTO contentsBookDTO = new ContentsBookDTO(contents.getBook());
+        ContentsDTO contentsDTO = new ContentsDTO(contents, contentsBookDTO);
+        return ResponseEntity.ok(contentsDTO);
     }
 
     // s3 업로드 테스트
