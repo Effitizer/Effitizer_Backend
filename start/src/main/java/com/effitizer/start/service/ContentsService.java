@@ -5,6 +5,7 @@ import com.effitizer.start.domain.*;
 import com.effitizer.start.domain.dto.Contents.AllContentsDTO;
 import com.effitizer.start.domain.dto.Contents.ContentsDTO;
 import com.effitizer.start.domain.dto.Contents.ContentsRequest;
+import com.effitizer.start.domain.dto.Contents.OnlyContentsDTO;
 import com.effitizer.start.repository.ContentsRepository;
 import com.effitizer.start.repository.OrderRepository;
 import com.effitizer.start.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,8 +54,8 @@ public class ContentsService {
                 .orElse(null);
     }
 
-    public List<ContentsDTO> saveContents(LinkedList<ContentsRequest> contentsRequestLinkedList, User user, Book book) {
-        List<ContentsDTO> contentsDTOArrayList = new ArrayList<>();
+    public List<OnlyContentsDTO> saveContents(LinkedList<ContentsRequest> contentsRequestLinkedList, User user, Book book) throws IOException {
+        List<OnlyContentsDTO> contentsDTOArrayList = new ArrayList<>();
         for (int i=0; i<=contentsRequestLinkedList.size(); i++){
             ContentsRequest contentsRequest = contentsRequestLinkedList.get(i);
             Contents contents = new Contents(user, book, contentsRequest.getTitle(), contentsRequest.getContent());
@@ -66,8 +68,8 @@ public class ContentsService {
             Order order = orderService.saveOrder(contents, contentsRequest.getOrder());
 
             //DTO 생성
-            ContentsDTO contentsDTO = new ContentsDTO(contents);
-            contentsDTOArrayList.add(contentsDTO);
+            OnlyContentsDTO onlyContentsDTO = new OnlyContentsDTO(contents);
+            contentsDTOArrayList.add(onlyContentsDTO);
         }
         return contentsDTOArrayList;
     }

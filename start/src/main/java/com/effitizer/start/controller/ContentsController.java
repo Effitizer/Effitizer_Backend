@@ -5,11 +5,8 @@ import com.effitizer.start.domain.Book;
 import com.effitizer.start.domain.Contents;
 import com.effitizer.start.domain.Contentsfile;
 import com.effitizer.start.domain.User;
-import com.effitizer.start.domain.dto.Contents.AllContentsDTO;
+import com.effitizer.start.domain.dto.Contents.*;
 import com.effitizer.start.domain.dto.Contents.Book.ContentsBookDTO;
-import com.effitizer.start.domain.dto.Contents.ContentsDTO;
-import com.effitizer.start.domain.dto.Contents.ContentsRequest;
-import com.effitizer.start.domain.dto.Contents.AllContentsRequest;
 import com.effitizer.start.service.BookService;
 import com.effitizer.start.service.ContentsService;
 import com.effitizer.start.service.UserService;
@@ -36,13 +33,13 @@ public class ContentsController {
      * 콘텐츠 저장
      */
     @PostMapping("api/contents/new")
-    public ResponseEntity<?> saveContents(@RequestBody AllContentsRequest contentsRequest) {
+    public ResponseEntity<?> saveContents(@RequestBody AllContentsRequest contentsRequest) throws IOException {
         log.info("Contents controller: api/contents/new ---------------------");
         LinkedList<ContentsRequest> contentsRequestLinkedList = new LinkedList<>();
         contentsRequestLinkedList.addAll(contentsRequest.getContents());
         Book book = bookService.saveBook(contentsRequest.getIsbn(), contentsRequest.getTitle(), contentsRequest.getWriter(), contentsRequest.getPublisher(), contentsRequest.getCategory_id());
         User user = userService.findUserById(contentsRequest.getUser_id());
-        List<ContentsDTO> contentsDTOList = contentsService.saveContents(contentsRequestLinkedList, user, book);
+        List<OnlyContentsDTO> contentsDTOList = contentsService.saveContents(contentsRequestLinkedList, user, book);
         AllContentsDTO allContentsDTO = new AllContentsDTO(book.getId(), book.getTitle(), book.getIsbn(), book.getWriter().getName(), book.getPublisher().getName(), contentsDTOList);
         return ResponseEntity.ok(allContentsDTO);
     }
@@ -56,7 +53,7 @@ public class ContentsController {
         Contents contents = contentsService.findContensById(contents_id);
         return ResponseEntity.ok(new ContentsDTO(contents));
     }
-    
+
     /**
      * 콘텐츠 수정
      */

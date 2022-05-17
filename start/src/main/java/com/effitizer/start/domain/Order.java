@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "BookOrder")
 public class Order extends BaseTimeEntity{
 
     @Id

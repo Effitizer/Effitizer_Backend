@@ -24,13 +24,12 @@ public class GroupController {
     GroupService groupService;
 
     /**
-     *
-     * @return
+     * 컨텐츠
      */
-    @GetMapping("/api/content")
+    @GetMapping("/api/group")
     public ResponseEntity<List<?>> sendAllGroupList() {
         try {
-            log.info("Group controller: /api/content ---------------------");
+            log.info("Group controller: /api/group ---------------------");
             List<Group> groupList= groupService.findAllGroupList();
             List<AllGroupDTO> allGroupDTOList = new ArrayList<>();
             for(int i=0; i<=groupList.size(); i++) {

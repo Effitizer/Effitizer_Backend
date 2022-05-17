@@ -15,6 +15,6 @@ public class AllContentsDTO {
     private String isbn;
     private String writer;
     private String publisher;
-    private List<ContentsDTO> contents;
+    private List<OnlyContentsDTO> contents;
 
 }

@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "groups")
 public class Group extends BaseTimeEntity{
     @Id
     @GeneratedValue
