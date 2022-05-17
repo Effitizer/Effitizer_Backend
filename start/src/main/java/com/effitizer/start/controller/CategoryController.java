@@ -2,6 +2,7 @@ package com.effitizer.start.controller;
 
 import com.effitizer.start.domain.Category;
 import com.effitizer.start.domain.dto.Category.CategoryDTO;
+import com.effitizer.start.domain.dto.Category.CategoryRequest;
 import com.effitizer.start.error.ErrorResponse;
 import com.effitizer.start.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
-@RequestMapping("/api/category")
+@RequestMapping("test/api/category")
 public class CategoryController {
     @Autowired CategoryService categoryService;
 
@@ -45,10 +46,10 @@ public class CategoryController {
      * 카테고리 저장
      */
     @PostMapping("/new")
-    public ResponseEntity<?> saveCategory(@RequestParam("name") String name) {
+    public ResponseEntity<?> saveCategory(@RequestBody CategoryRequest categoryRequest) {
         try {
             log.info("Category controller: /api/category/new ---------------------");
-            Category category = categoryService.saveCategory(name);
+            Category category = categoryService.saveCategory(categoryRequest.getName());
             return new ResponseEntity<>(new CategoryDTO(category), HttpStatus.OK);
         }
         catch (IllegalStateException e) {

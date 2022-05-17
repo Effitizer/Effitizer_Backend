@@ -33,12 +33,7 @@ public class BookService {
                 .orElse(null);
 
         // 책 생성
-        Book book = new Book();
-        book.setWriter(writer);
-        book.setPublisher(publisher);
-        book.setCategory(category);
-        book.setIsbn(isbn);
-        book.setTitle(title);
+        Book book = new Book(publisher, writer, category, title, isbn);
         bookRepository.save(book);
         return book;
     }

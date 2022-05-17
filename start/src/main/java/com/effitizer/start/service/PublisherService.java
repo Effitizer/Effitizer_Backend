@@ -19,8 +19,7 @@ public class PublisherService {
     public Publisher savePublisherOrFind(String publisher_name) {
         Optional<Publisher> findPublisher = publisherRepository.findByName(publisher_name);
         if (findPublisher.isEmpty()) {
-            Publisher publisher = new Publisher();
-            publisher.setName(publisher_name);
+            Publisher publisher = new Publisher(publisher_name);
             publisherRepository.save(publisher);
             return publisher;
         }

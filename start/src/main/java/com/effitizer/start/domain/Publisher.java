@@ -23,6 +23,10 @@ public class Publisher extends BaseTimeEntity{
     @OneToMany(mappedBy = "publisher")
     private List<Book> books = new ArrayList<>();
 
+    public Publisher (String name) {
+        this.name = name;
+    }
+
     //==연관관계 메서드==//
     public void setBook(Book book) {
         this.books.add(book);

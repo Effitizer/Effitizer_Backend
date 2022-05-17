@@ -31,8 +31,6 @@ public class Contentsfile extends BaseTimeEntity {
         this.name = name;
     }
 
-
-
 }
 
 

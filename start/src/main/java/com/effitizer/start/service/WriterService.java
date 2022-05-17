@@ -19,8 +19,7 @@ public class WriterService {
     public Writer saveWriterOrFind(String writer_name) {
         Optional<Writer> findWriter = writerRepository.findByName(writer_name);
         if (findWriter.isEmpty()) {
-            Writer writer = new Writer();
-            writer.setName(writer_name);
+            Writer writer = new Writer(writer_name);
             writerRepository.save(writer);
             return writer;
         }

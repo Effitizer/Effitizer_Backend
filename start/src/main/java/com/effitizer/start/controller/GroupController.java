@@ -13,12 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Controller
+@RequestMapping("test/api/group")
 public class GroupController {
     @Autowired
     GroupService groupService;
@@ -38,15 +40,12 @@ public class GroupController {
                 List<GroupContentsDTO> groupContentsDTOList = new ArrayList<>();
                 for(int j=0; j<=contentsList.size();j++) {
                     Contents contents = contentsList.get(i);
-                    Book book = contents.getBook();
-                    // Book 설정
-                    GroupBookDTO groupBookDTO = new GroupBookDTO(book.getTitle(), book.getWriter().getName(), book.getPublisher().getName(), "coverUrl");
                     //Content 설정
-                    GroupContentsDTO groupContentsDTO = new GroupContentsDTO(contents.getId(), contents.getTitle(), contents.getOrder().getOrder_num(), groupBookDTO);
+                    GroupContentsDTO groupContentsDTO = new GroupContentsDTO(contents);
                     groupContentsDTOList.add(groupContentsDTO);
                 }
                 // Group 설정
-                AllGroupDTO allGroupDTO = new AllGroupDTO(group.getId(), group.getTitle(), groupContentsDTOList);
+                AllGroupDTO allGroupDTO = new AllGroupDTO(group, groupContentsDTOList);
                 allGroupDTOList.add(allGroupDTO);
             }
             return ResponseEntity.ok(allGroupDTOList);

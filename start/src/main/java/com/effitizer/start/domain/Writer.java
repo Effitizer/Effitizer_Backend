@@ -22,6 +22,10 @@ public class Writer extends BaseTimeEntity{
     @OneToMany(mappedBy = "publisher")
     private List<Book> books = new ArrayList<>();
 
+    public Writer (String name) {
+        this.name = name;
+    }
+
     //==연관관계 메서드==//
     public void setBook(Book book) {
         this.books.add(book);

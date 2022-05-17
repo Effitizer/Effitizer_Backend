@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class AllContentsRequest {
     private String title;
     private String isbn;
+    private MultipartFile cover;
     private String writer;
     private String publisher;
     private Long category_id;
