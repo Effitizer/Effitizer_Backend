@@ -8,13 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.PublicKey;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class PublisherService {
-    @Autowired
-    PublisherRepository publisherRepository;
+    @Autowired PublisherRepository publisherRepository;
+
+    public Publisher saveOne(Publisher publisher) {
+        return publisherRepository.save(publisher);
+    }
 
     public Publisher savePublisherOrFind(String publisher_name) {
         Optional<Publisher> findPublisher = publisherRepository.findByName(publisher_name);

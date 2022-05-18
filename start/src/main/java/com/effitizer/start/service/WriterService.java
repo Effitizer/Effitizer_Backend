@@ -1,5 +1,6 @@
 package com.effitizer.start.service;
 
+import com.effitizer.start.domain.Book;
 import com.effitizer.start.domain.Writer;
 import com.effitizer.start.repository.WriterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,10 @@ import java.util.Optional;
 @Transactional
 public class WriterService {
     @Autowired WriterRepository writerRepository;
+
+    public Writer saveOne(Writer writer) {
+        return writerRepository.save(writer);
+    }
 
     /**
      * Writer 이름 조회 후 없으면 생성 있으면 반환

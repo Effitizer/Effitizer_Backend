@@ -17,6 +17,7 @@ public class GroupBookDTO {
         this.title = book.getTitle();
         this.writer = book.getWriter().getName();
         this.publisher = book.getPublisher().getName();
-        this.coverUrl = book.getBookcoverfile().getPath();
+        this.coverUrl = "cover";
+        //this.coverUrl = book.getBookcoverfile().getPath();
     }
 }

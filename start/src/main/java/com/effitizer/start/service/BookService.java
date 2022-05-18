@@ -22,6 +22,13 @@ public class BookService {
     @Autowired PublisherService publisherService;
     @Autowired CategoryRepository categoryRepository;
 
+    public Book saveOne(Book book) {
+        writerService.saveOne(book.getWriter());
+        publisherService.saveOne(book.getPublisher());
+        categoryRepository.save(book.getCategory());
+        return bookRepository.save(book);
+    }
+
 
     public Book saveBook(String isbn, String title, String writer_name, String publisher_name, Long category_id) {
         // writer id 조회 -> 없으면 생성

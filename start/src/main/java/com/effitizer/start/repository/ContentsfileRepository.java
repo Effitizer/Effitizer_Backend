@@ -1,2 +1,9 @@
-package com.effitizer.start.repository;public class ContentsfileRepository {
+package com.effitizer.start.repository;
+
+import com.effitizer.start.domain.Contentsfile;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ContentsfileRepository extends JpaRepository<Contentsfile, Long> {
 }

@@ -1,4 +1,4 @@
-package com.effitizer.start.domain.dto.Contents;
+package com.effitizer.start.domain.dto.Contents.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,5 +20,4 @@ public class AllContentsRequest {
     private Long category_id;
     private Long user_id;
     private List<ContentsRequest> contents;
-
 }

@@ -2,12 +2,11 @@ package com.effitizer.start.service;
 
 import com.effitizer.start.aws.S3Uploader;
 import com.effitizer.start.domain.*;
-import com.effitizer.start.domain.dto.Contents.AllContentsDTO;
-import com.effitizer.start.domain.dto.Contents.ContentsDTO;
-import com.effitizer.start.domain.dto.Contents.ContentsRequest;
-import com.effitizer.start.domain.dto.Contents.OnlyContentsDTO;
+import com.effitizer.start.domain.dto.Contents.*;
+import com.effitizer.start.domain.dto.Contents.Request.ContentsRequest;
+import com.effitizer.start.domain.dto.Contents.Request.OnlyContentsRequest;
 import com.effitizer.start.repository.ContentsRepository;
-import com.effitizer.start.repository.OrderRepository;
+import com.effitizer.start.repository.ContentsfileRepository;
 import com.effitizer.start.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,24 +24,34 @@ public class ContentsService {
     @Autowired UserRepository userRepository;
     @Autowired OrderService orderService;
     @Autowired S3Uploader s3Uploader;
+    @Autowired
+    ContentsfileRepository contentsfileRepository;
 
     /**
      * 콘텐츠 저장
      */
-    public Contents save(Contents contents) {
+    public Contents saveOne(Contents contents) {
+        userRepository.save(contents.getUser());
         contentsRepository.save(contents);
+        contents.setOrder(orderService.saveOrder(contents, 1));
+        Contentsfile contentsfile = contentsfileRepository.save(new Contentsfile());
+        List<Contentsfile> contentsfileList = new ArrayList<>();
+        contentsfileList.add(contentsfile);
+        contents.setContentsfiles(contentsfileList);
         return contents;
     }
 
     /**
      *  콘텐츠 수정
      */
-    public Contents update(ContentsDTO contentsDTO) {
-        Contents contents = contentsRepository.getById(contentsDTO.getId());
-        User user = userRepository.getById(contentsDTO.getUser_id());
+    public Contents update(OnlyContentsRequest onlyContentsRequest) {
+        Contents contents = contentsRepository.getById(onlyContentsRequest.getId());
+        User user = userRepository.getById(onlyContentsRequest.getUser_id());
         contents.setUser(user);
-        contents.setTitle(contentsDTO.getTitle());
-        contents.setContent(contentsDTO.getContent());
+        Order order = contents.getOrder();
+        order.setOrder_num(onlyContentsRequest.getBook_order());
+        contents.setTitle(onlyContentsRequest.getTitle());
+        contents.setContent(onlyContentsRequest.getContent());
         return contents;
     }
 
@@ -54,9 +63,12 @@ public class ContentsService {
                 .orElse(null);
     }
 
+    /**
+     *  콘텐츠 저장장
+    */
     public List<OnlyContentsDTO> saveContents(LinkedList<ContentsRequest> contentsRequestLinkedList, User user, Book book) throws IOException {
         List<OnlyContentsDTO> contentsDTOArrayList = new ArrayList<>();
-        for (int i=0; i<=contentsRequestLinkedList.size(); i++){
+        for (int i=0; i<contentsRequestLinkedList.size(); i++){
             ContentsRequest contentsRequest = contentsRequestLinkedList.get(i);
             Contents contents = new Contents(user, book, contentsRequest.getTitle(), contentsRequest.getContent());
             contentsRepository.save(contents);
@@ -65,7 +77,7 @@ public class ContentsService {
             Contentsfile contentsfile = s3Uploader.upload(contents.getId(), contentsRequest.getImage(), "image");
 
             //Order 생성
-            Order order = orderService.saveOrder(contents, contentsRequest.getOrder());
+            Order order = orderService.saveOrder(contents, contentsRequest.getBook_order());
 
             //DTO 생성
             OnlyContentsDTO onlyContentsDTO = new OnlyContentsDTO(contents);

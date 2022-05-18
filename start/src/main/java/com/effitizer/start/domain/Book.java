@@ -22,7 +22,7 @@ public class Book extends BaseTimeEntity{
     @JoinColumn(name = "publisher_id")
     private Publisher publisher; //출판사 id
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "writer_id")
     private Writer writer; //작가 id
 

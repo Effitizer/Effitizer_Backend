@@ -1,4 +1,4 @@
-package com.effitizer.start.domain.dto.Category;
+package com.effitizer.start.domain.dto.Group.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryRequest {
-    private String name;
+public class GroupContentsRequest {
+    private Long id;
+    private String title;
 }

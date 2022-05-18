@@ -2,7 +2,7 @@ package com.effitizer.start.controller;
 
 import com.effitizer.start.domain.Category;
 import com.effitizer.start.domain.dto.Category.CategoryDTO;
-import com.effitizer.start.domain.dto.Category.CategoryRequest;
+import com.effitizer.start.domain.dto.Category.Request.CategoryRequest;
 import com.effitizer.start.error.ErrorResponse;
 import com.effitizer.start.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;

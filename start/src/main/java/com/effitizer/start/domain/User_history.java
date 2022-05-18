@@ -1,6 +1,7 @@
 package com.effitizer.start.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class User_history {
     @Id
     @GeneratedValue

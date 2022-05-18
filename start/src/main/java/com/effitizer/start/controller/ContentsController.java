@@ -1,16 +1,18 @@
 package com.effitizer.start.controller;
 
 import com.effitizer.start.aws.S3Uploader;
-import com.effitizer.start.domain.Book;
-import com.effitizer.start.domain.Contents;
-import com.effitizer.start.domain.Contentsfile;
-import com.effitizer.start.domain.User;
+import com.effitizer.start.domain.*;
 import com.effitizer.start.domain.dto.Contents.*;
+import com.effitizer.start.domain.dto.Contents.Request.AllContentsRequest;
+import com.effitizer.start.domain.dto.Contents.Request.ContentsRequest;
+import com.effitizer.start.domain.dto.Contents.Request.OnlyContentsRequest;
+import com.effitizer.start.error.ErrorResponse;
 import com.effitizer.start.service.BookService;
 import com.effitizer.start.service.ContentsService;
 import com.effitizer.start.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -49,19 +51,35 @@ public class ContentsController {
      */
     @GetMapping("/{contents_id}")
     public ResponseEntity<?> selectContents(@PathVariable("contents_id") Long contents_id) {
-        log.info("Contents controller: api/contents/contents_id ---------------------");
-        Contents contents = contentsService.findContensById(contents_id);
-        return ResponseEntity.ok(new ContentsDTO(contents));
+        try {
+            log.info("Contents controller: api/contents/{contents_id}---------------------");
+            // test용 데이터
+            Book book = bookService.saveOne(new Book(new Publisher("publisher"), new Writer("writer"), new Category("science"), "string", "string"));
+            Contents test_contents = contentsService.saveOne(new Contents(new User("name", "email", Role.USER), book, "title", "content"));
+
+            Contents contents = contentsService.findContensById(contents_id);
+            return ResponseEntity.ok(new ContentsDTO(contents));
+        }
+        catch (Exception e){
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
      * 콘텐츠 수정
      */
     @PostMapping("/{contents_id}/edit")
-    public ResponseEntity<?> editOneContents(@PathVariable("contents_id") Long contents_id, @RequestBody ContentsDTO contentsDTO) {
-        log.info("Contents controller: api/contents/{contents_id}/edit ---------------------");
-        Contents contents = contentsService.update(contentsDTO);
-        return ResponseEntity.ok(new ContentsDTO(contents));
+    public ResponseEntity<?> editOneContents(@PathVariable("contents_id") Long contents_id, @RequestBody OnlyContentsRequest onlyContentsRequest) {
+        try {
+            log.info("Contents controller: api/contents/{contents_id}/edit -----------------------------------");
+            Contents contents = contentsService.update(onlyContentsRequest);
+            return ResponseEntity.ok(new ContentsDTO(contents));
+        }
+        catch (Exception e){
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
     // s3 업로드 테스트

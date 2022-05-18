@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Contentsfile extends BaseTimeEntity {
     @Id
     @GeneratedValue

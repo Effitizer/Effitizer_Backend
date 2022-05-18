@@ -22,6 +22,10 @@ public class Category extends BaseTimeEntity{
     @OneToMany(mappedBy = "category")
     private List<Book> books = new ArrayList<>();
 
+    public Category(String name) {
+        this.name = name;
+    }
+
     //==연관관계 메서드==//
     public void setBook(Book book) {
         this.books.add(book);
