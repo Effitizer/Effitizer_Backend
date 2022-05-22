@@ -9,12 +9,15 @@ import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-public class User{
+public class User extends BaseTimeEntity{
     @Id @GeneratedValue
+    @Column(name = "user_id")
     private Long id; //  id
 
     @Column(nullable = false)
@@ -23,9 +26,6 @@ public class User{
     @Column(nullable = false)
     private String email; //이메일
 
-    //@Column(nullable = false)
-    //private String nickname; //닉이름
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -33,12 +33,14 @@ public class User{
     @Column(nullable = false)
     private Boolean is_subscribed = false; //구독여부
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime create_time; //생성일
+    @OneToOne(mappedBy = "user")
+    private Subscribe subscribe;
 
-    @LastModifiedBy
-    private LocalDateTime update_time; //수정일
+    @OneToMany(mappedBy = "user")
+    private List<User_history> user_historys = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Contents> contents = new ArrayList<>();
 
     @Builder
     public User(String name, String email, Role role){
@@ -56,8 +58,15 @@ public class User{
         return this.role.getKey();
     }
 
+    //==연관관계 메서드==//
+    public void setContents(Contents contents) {
+        this.contents.add(contents);
+        contents.setUser(this);
+    }
 
-
-
+    public void setUser_history(User_history user_history) {
+        this.user_historys.add(user_history);
+        user_history.setUser(this);
+    }
 
 }

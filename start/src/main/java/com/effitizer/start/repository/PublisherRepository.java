@@ -1,5 +1,6 @@
 package com.effitizer.start.repository;
 
+import com.effitizer.start.domain.Publisher;
 import com.effitizer.start.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+public interface PublisherRepository extends JpaRepository<Publisher, Long> {
+    Optional<Publisher> findByName(String name);
+
 }
