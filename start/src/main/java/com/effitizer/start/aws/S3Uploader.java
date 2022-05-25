@@ -34,16 +34,15 @@ public class S3Uploader {
         log.info("파일 확인"+ multipartFile.toString());
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-        return upload(contentsId, uploadFile, dirName);
+        return upload(contentsId, uploadFile, dirName, multipartFile.getSize(), multipartFile.getContentType(), multipartFile.getOriginalFilename());
     }
 
-
-    private Contentsfile upload(Long contentsId, File uploadFile, String dirName) {
+    private Contentsfile upload(Long contentsId, File uploadFile, String dirName, Long size, String extend, String origin_filename) {
         String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
         Contents contents = contentsRepository.findById(contentsId).get();
-        return new Contentsfile(contents, fileName, uploadImageUrl);
+        return new Contentsfile(contents, origin_filename, fileName, size, uploadImageUrl, extend);
     }
 
     private String putS3(File uploadFile, String fileName) {

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
-@RequestMapping("test/api/category")
+@RequestMapping("api/category")
 public class CategoryController {
     @Autowired CategoryService categoryService;
 

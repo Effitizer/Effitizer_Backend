@@ -28,9 +28,9 @@ public class Contents extends BaseTimeEntity{
     @JoinColumn(name = "book_id")
     public Book book; //책 id
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
-    public Group group; //책 id
+    public List<Group> groups = new ArrayList<>(); //책 id
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")

@@ -24,8 +24,7 @@ public class ContentsService {
     @Autowired UserRepository userRepository;
     @Autowired OrderService orderService;
     @Autowired S3Uploader s3Uploader;
-    @Autowired
-    ContentsfileRepository contentsfileRepository;
+    @Autowired ContentsfileRepository contentsfileRepository;
 
     /**
      * 콘텐츠 저장
@@ -64,7 +63,7 @@ public class ContentsService {
     }
 
     /**
-     *  콘텐츠 저장장
+     *  콘텐츠 저장
     */
     public List<OnlyContentsDTO> saveContents(LinkedList<ContentsRequest> contentsRequestLinkedList, User user, Book book) throws IOException {
         List<OnlyContentsDTO> contentsDTOArrayList = new ArrayList<>();

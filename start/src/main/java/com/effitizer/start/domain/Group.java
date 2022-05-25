@@ -21,7 +21,7 @@ public class Group extends BaseTimeEntity{
 
     private String title; // 주제
 
-    @OneToMany(mappedBy = "group")
+    @ManyToMany(mappedBy = "groups")
     private List<Contents> contents = new ArrayList<>();
 
     public Group(String title, List<Contents> contents) {
@@ -34,7 +34,7 @@ public class Group extends BaseTimeEntity{
     public void setContents(List<Contents> contentsList) {
         for(int i=0; i<contentsList.size(); i++){
             Contents contents = contentsList.get(i);
-            contents.setGroup(this);
+            contents.getGroups().add(this);
         }
     }
 }
