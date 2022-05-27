@@ -1,5 +1,6 @@
 package com.effitizer.start.service.Payment;
 
+import com.effitizer.start.domain.vo.GetTokenVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ public class SchedulePaymentService {
     @Setter(onMethod_ = @Autowired)
     private ImportPayService pay;
 
-    public String schedulePay(long customer_uid, int price) {
+    public String schedulePay(String customer_uid, int price) {
         String token = pay.getToken();
         long timestamp = 0;
         Calendar cal = Calendar.getInstance();
