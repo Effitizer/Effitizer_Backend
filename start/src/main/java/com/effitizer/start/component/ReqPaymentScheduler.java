@@ -4,12 +4,14 @@ import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import com.effitizer.start.service.Payment.SchedulePaymentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.PeriodicTrigger;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ReqPaymentScheduler {
     //스케줄러
@@ -42,16 +44,17 @@ public class ReqPaymentScheduler {
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.MONTH, 30);
+        cal.add(Calendar.MONTH, 1);
         cal.add(Calendar.DATE, 1);
         Date s = convertFromJAVADateToSQLDate(cal.getTime());
         return () -> {
-            setSchedulePay.schedulePay(customer_uid, price);
+            String scheduleData = setSchedulePay.schedulePay(customer_uid, price);
+            log.info("---------------------- ReqPaymentScheduler----------------------: -> 스케줄 예약 : "+scheduleData);
         };
     }
 
     private Trigger getTrigger() {
         // 작업 주기 설정
-        return new PeriodicTrigger(1, TimeUnit.MINUTES);
+        return new PeriodicTrigger(30, TimeUnit.DAYS);
     }
 }

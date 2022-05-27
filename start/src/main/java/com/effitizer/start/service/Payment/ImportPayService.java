@@ -23,16 +23,16 @@ public class ImportPayService {
 
 
         Map<String, Object> map = new HashMap<>();
-        map.put("imp_key", "imp_key");
-        map.put("imp_secret", "imp_secret");
+        // 아임포트 시스템 설정에서 확인할 수 있는 데이터
+        map.put("imp_key", "2589352930819343");
+        map.put("imp_secret", "e0a2352d4e087a9db24ae347b476914b047c01266a23b3f87cf308cdcd50418995287ffdd78eb1fa");
 
 
         Gson var = new Gson();
         String json=var.toJson(map);
         //서버로 요청할 Body
 
-        HttpEntity<String> entity = new HttpEntity<>(json,headers);
+        HttpEntity<String> entity = new HttpEntity<>(json, headers);
         return restTemplate.postForObject("https://api.iamport.kr/users/getToken", entity, String.class);
-
     }
 }

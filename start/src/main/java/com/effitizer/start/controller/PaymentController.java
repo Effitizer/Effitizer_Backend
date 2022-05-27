@@ -28,6 +28,8 @@ public class PaymentController {
     @PostMapping("/test/insertSubscribe")
     @ResponseBody
     public int getPayment(@RequestBody PaymentRequest paymentRequest) {
+        // 카드사 요청에 실패 (paymentResult is null) exception추가
+        //카드 승인 실패 (예: 고객 카드 한도초과, 거래정지카드, 잔액부족 등) exception추가
         log.info("------------- payment controller -> insertSubscribe");
         log.info("------------- payment controller -> " + paymentRequest.getMerchant_uid());
         int res = 1;
@@ -41,9 +43,6 @@ public class PaymentController {
         log.info("------------- payment controller -> payment1");
         String customer_uid = paymentRequest.getCustomer_uid();
         int price = paymentRequest.getPaid_amount();
-        long merchant_uid = Long.parseLong(paymentRequest.getMerchant_uid());
-        log.info("-------------"+ customer_uid);
-        log.info("-------------"+ price);
         scheduler.startScheduler(customer_uid, price);
     }
 }

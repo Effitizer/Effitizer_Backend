@@ -1,6 +1,7 @@
 package com.effitizer.start.service.Payment;
 
 import com.effitizer.start.domain.vo.GetTokenVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,6 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.Setter;
 
+@Slf4j
 @Service
 public class SchedulePaymentService {
     @Setter(onMethod_ = @Autowired)
@@ -26,6 +28,7 @@ public class SchedulePaymentService {
 
     public String schedulePay(String customer_uid, int price) {
         String token = pay.getToken();
+        log.info("---------------------- SchedulePaymentService----------------------: -> get token : "+token);
         long timestamp = 0;
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.KOREA);
@@ -39,6 +42,7 @@ public class SchedulePaymentService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         Gson str = new Gson();
         token = token.substring(token.indexOf("response") +10);
         token = token.substring(0, token.length() - 1);
@@ -63,12 +67,9 @@ public class SchedulePaymentService {
         reqJson.addProperty("customer_uid", customer_uid);
         reqJson.add("schedules",jsonArr);
         String json = str.toJson(reqJson);
-        System.out.println(json);
+
+        log.info("---------------------- SchedulePaymentService----------------------: -> 결제 예약 : "+json);
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
         return restTemplate.postForObject("https://api.iamport.kr/subscribe/payments/schedule", entity, String.class);
-
-
-
-
     }
 }
