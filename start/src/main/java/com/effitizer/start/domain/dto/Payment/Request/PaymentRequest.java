@@ -12,11 +12,16 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentRequest {
-    private String customer_uid;
+    private Long user_id;
     private String imp_uid;
-    private String merchant_uid;
-    private String buyer_email;
-    private Date pay_date;
+    private String buyer_name;
     private int paid_amount;
-    private String card_number;
+    private Long apply_num;
+    private String card_name;
+    private String card_num;
+    private String currency;
+    private String receipt_url;
+    private String customer_uid;
+    private String  pg_provider;
+    private Date pay_date;
 }
