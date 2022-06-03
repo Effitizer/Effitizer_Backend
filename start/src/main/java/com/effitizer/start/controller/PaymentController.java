@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping("/test/payment")
+@RequestMapping("/api/payment")
 public class PaymentController {
     @Autowired ReqPaymentScheduler scheduler;
     @Autowired UserService userService;

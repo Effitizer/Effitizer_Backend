@@ -35,7 +35,7 @@ public class ContentsController {
      * 콘텐츠 저장
      */
     @PostMapping("/new")
-    public ResponseEntity<?> saveContents(@RequestBody AllContentsRequest contentsRequest) throws IOException {
+    public ResponseEntity<?> saveContents(@RequestPart(required = false) AllContentsRequest contentsRequest) throws IOException {
         log.info("Contents controller: api/contents/new ---------------------");
         LinkedList<ContentsRequest> contentsRequestLinkedList = new LinkedList<>();
         contentsRequestLinkedList.addAll(contentsRequest.getContents());

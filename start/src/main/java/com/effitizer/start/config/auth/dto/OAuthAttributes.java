@@ -75,7 +75,7 @@ public class OAuthAttributes {
         return User.builder()
                 .name(name)
                 .email(email)
-                .role(Role.GUEST) // 기본 권한 GUEST
+                .role(Role.USER) // 기본 권한 GUEST
                 .build();
     }
 }
