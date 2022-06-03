@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.MapUtils;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -44,6 +45,19 @@ public class ContentsController {
         List<OnlyContentsDTO> contentsDTOList = contentsService.saveContents(contentsRequestLinkedList, user, book);
         AllContentsDTO allContentsDTO = new AllContentsDTO(book, contentsDTOList);
         return ResponseEntity.ok(allContentsDTO);
+    }
+
+    /**
+     * 콘텐츠 저장
+     */
+    @PostMapping("/new/test")
+    public ResponseEntity<?> saveContents2(@RequestPart(required = false) ContentsTestRequest contentsRequest,
+                                           @RequestPart(required = false) MultipartFile book_cover,
+                                           @RequestPart(required = false) List<MultipartFile> contents_images)
+            throws IOException {
+        log.info("Contents controller: api/contents/new ---------------------");
+
+        return ResponseEntity.ok(contentsRequest);
     }
 
     /**

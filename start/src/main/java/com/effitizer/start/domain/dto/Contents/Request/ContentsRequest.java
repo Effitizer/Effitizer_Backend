@@ -13,5 +13,4 @@ public class ContentsRequest {
     private String content;
     private int book_order;
     private MultipartFile image;
-
 }

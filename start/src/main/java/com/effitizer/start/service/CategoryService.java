@@ -24,8 +24,7 @@ public class CategoryService {
                     throw new IllegalStateException("이미 존재하는 데이터입니다.");
                 });
 
-        Category category  = new Category();
-        category.setName(name);
+        Category category  = new Category(name);
         categoryRepository.save(category);
         return category;
     }

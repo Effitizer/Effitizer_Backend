@@ -32,7 +32,7 @@ public class Group extends BaseTimeEntity{
 
     //==연관관계 메서드==//
     public void setContents(List<Contents> contentsList) {
-        for(int i=0; i<contentsList.size(); i++){
+        for (int i=0; i<contentsList.size(); i++) {
             Contents contents = contentsList.get(i);
             contents.getGroups().add(this);
         }
