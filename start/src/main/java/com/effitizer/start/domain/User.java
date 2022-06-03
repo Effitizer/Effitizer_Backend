@@ -4,11 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +34,7 @@ public class User extends BaseTimeEntity{
     private Subscribe subscribe;
 
     @OneToMany(mappedBy = "user")
-    private List<User_history> user_historys = new ArrayList<>();
+    private List<UserHistory> user_historys = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Contents> contents = new ArrayList<>();
@@ -64,7 +61,7 @@ public class User extends BaseTimeEntity{
         contents.setUser(this);
     }
 
-    public void setUser_history(User_history user_history) {
+    public void setUser_history(UserHistory user_history) {
         this.user_historys.add(user_history);
         user_history.setUser(this);
     }

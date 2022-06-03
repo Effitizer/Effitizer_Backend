@@ -56,6 +56,9 @@ dependencies {
 	// json
 	implementation 'com.fasterxml.jackson.core:jackson-core:2.12.3'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+
+	//AOP
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 tasks.named('test') {
