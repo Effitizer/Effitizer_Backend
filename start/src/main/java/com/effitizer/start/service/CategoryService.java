@@ -30,6 +30,14 @@ public class CategoryService {
     }
 
     /**
+     * id로 Category 조회
+     */
+    public Category findCategoryById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalStateException("카테고리 정보가 올바르지 않습니다."));
+    }
+
+    /**
      *  전체 Category 객체 조회
      */
     public List<Category> findCategorys() {

@@ -25,7 +25,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("test/api/contents")
+@RequestMapping("api/contents")
 public class ContentsController {
     @Autowired ContentsService contentsService;
     @Autowired BookService bookService;
@@ -38,13 +38,8 @@ public class ContentsController {
     @PostMapping("/new")
     public ResponseEntity<?> saveContents(@RequestPart(required = false) AllContentsRequest contentsRequest) throws IOException {
         log.info("Contents controller: api/contents/new ---------------------");
-        LinkedList<ContentsRequest> contentsRequestLinkedList = new LinkedList<>();
-        contentsRequestLinkedList.addAll(contentsRequest.getContents());
-        Book book = bookService.saveBook(contentsRequest.getIsbn(), contentsRequest.getTitle(), contentsRequest.getWriter(), contentsRequest.getPublisher(), contentsRequest.getCategory_id());
-        User user = userService.findUserById(contentsRequest.getUser_id());
-        List<OnlyContentsDTO> contentsDTOList = contentsService.saveContents(contentsRequestLinkedList, user, book);
-        AllContentsDTO allContentsDTO = new AllContentsDTO(book, contentsDTOList);
-        return ResponseEntity.ok(allContentsDTO);
+
+        return ResponseEntity.ok("test");
     }
 
     /**
@@ -68,7 +63,8 @@ public class ContentsController {
         try {
             log.info("Contents controller: api/contents/{contents_id}---------------------");
             // test용 데이터
-            Book book = bookService.saveOne(new Book(new Publisher("publisher"), new Writer("writer"), new Category("science"), "string", "string"));
+            //Book book = bookService.saveOne(new Book(new Publisher("publisher"), new User("user"), new Category("science"), "string", "string"));
+            Book book = new Book();
             Contents test_contents = contentsService.saveOne(new Contents(new User("name", "email", Role.USER), book, "title", "content"));
 
             Contents contents = contentsService.findContensById(contents_id);

@@ -42,6 +42,9 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user")
     private List<Contents> contents = new ArrayList<>();
 
+    @OneToMany(mappedBy = "writer")
+    private List<Book> books = new ArrayList<>();
+
     @Builder
     public User(String name, String email, Role role){
         this.name = name;

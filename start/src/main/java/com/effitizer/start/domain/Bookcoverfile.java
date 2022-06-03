@@ -1,5 +1,6 @@
 package com.effitizer.start.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,4 +26,14 @@ public class Bookcoverfile extends BaseTimeEntity {
     private Long size; // 파일크기
     private String path; // 파일경로
     private String extend; // 파일확장자
+
+    @Builder
+    public Bookcoverfile(Book book, String real_name, String name, Long size, String path, String extend) {
+        this.book = book;
+        this.real_name = real_name;
+        this.name = name;
+        this.size = size;
+        this.path = path;
+        this.extend = extend;
+    }
 }
