@@ -5,6 +5,7 @@ import com.effitizer.start.domain.*;
 import com.effitizer.start.domain.dto.Contents.*;
 import com.effitizer.start.domain.dto.Contents.Contentsfile.ContentsContentsfileDTO;
 import com.effitizer.start.domain.dto.Contents.Request.ContentsRequest;
+import com.effitizer.start.domain.dto.Contents.Request.OnlyContentsRequest;
 import com.effitizer.start.error.ErrorResponse;
 import com.effitizer.start.service.BookService;
 import com.effitizer.start.service.ContentsService;
@@ -87,6 +88,6 @@ public class ContentsController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
-    
+
 
 }

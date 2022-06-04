@@ -2,6 +2,7 @@ package com.effitizer.start.service;
 
 import com.effitizer.start.domain.*;
 import com.effitizer.start.domain.dto.Contents.Request.ContentsRequest;
+import com.effitizer.start.domain.dto.Contents.Request.OnlyContentsRequest;
 import com.effitizer.start.repository.ContentsRepository;
 import com.effitizer.start.repository.ContentsfileRepository;
 import com.effitizer.start.repository.UserRepository;
