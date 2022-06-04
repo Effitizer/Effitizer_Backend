@@ -18,19 +18,19 @@ public class BookService {
     @Autowired CategoryService categoryService;
 
 
+    /**
+     * Book 저장
+     */
     public Book saveBook(BookRequest bookRequest) {
         // writer id 조회
         User writer = userService.findUserById(bookRequest.getWriter_id());
         if (writer.getRole() != Role.WRITER) {
             throw new IllegalStateException("작가 정보가 올바르지 않습니다.");
         }
-
         // publisher 조회
         Publisher publisher = publisherService.findPublisherById(bookRequest.getPublisher_id());
-
         // category 조회
         Category category = categoryService.findCategoryById(bookRequest.getCategory_id());
-
         // 책 생성
         Book book = Book.builder()
                     .user(writer)
@@ -41,5 +41,13 @@ public class BookService {
                     .build();
         bookRepository.save(book);
         return book;
+    }
+
+    /**
+     * isbn으로 Book 조회
+     */
+    public Book findBookByIsbn(String isbn){
+        return bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new IllegalStateException("책 정보가 올바르지 않습니다."));
     }
 }

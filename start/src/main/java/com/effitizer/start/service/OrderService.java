@@ -13,6 +13,9 @@ public class OrderService {
     @Autowired
     OrderRepository orderRepository;
 
+    /**
+     * Order 저장
+     */
     public Order saveOrder(Contents contents, int order_num) {
         Order order = new Order(order_num, contents);
         orderRepository.save(order);

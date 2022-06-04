@@ -35,18 +35,17 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public Contentsfile upload(Long contentsId, MultipartFile multipartFile, String dirName) throws IOException {
+    public Contentsfile upload(Contents contents, MultipartFile multipartFile, String dirName) throws IOException {
         log.info("파일 확인"+ multipartFile.toString());
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-        return upload(contentsId, uploadFile, dirName, multipartFile.getSize(), multipartFile.getContentType(), multipartFile.getOriginalFilename());
+        return upload(contents, uploadFile, dirName, multipartFile.getSize(), multipartFile.getContentType(), multipartFile.getOriginalFilename());
     }
 
-    private Contentsfile upload(Long contentsId, File uploadFile, String dirName, Long size, String extend, String origin_filename) {
+    private Contentsfile upload(Contents contents, File uploadFile, String dirName, Long size, String extend, String origin_filename) {
         String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
-        Contents contents = contentsRepository.findById(contentsId).get();
         return new Contentsfile(contents, origin_filename, fileName, size, uploadImageUrl, extend);
     }
 

@@ -3,9 +3,8 @@ package com.effitizer.start.controller;
 import com.effitizer.start.aws.S3Uploader;
 import com.effitizer.start.domain.*;
 import com.effitizer.start.domain.dto.Contents.*;
-import com.effitizer.start.domain.dto.Contents.Request.AllContentsRequest;
+import com.effitizer.start.domain.dto.Contents.Contentsfile.ContentsContentsfileDTO;
 import com.effitizer.start.domain.dto.Contents.Request.ContentsRequest;
-import com.effitizer.start.domain.dto.Contents.Request.OnlyContentsRequest;
 import com.effitizer.start.error.ErrorResponse;
 import com.effitizer.start.service.BookService;
 import com.effitizer.start.service.ContentsService;
@@ -17,10 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.util.MapUtils;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -36,23 +34,21 @@ public class ContentsController {
      * 콘텐츠 저장
      */
     @PostMapping("/new")
-    public ResponseEntity<?> saveContents(@RequestPart(required = false) AllContentsRequest contentsRequest) throws IOException {
-        log.info("Contents controller: api/contents/new ---------------------");
-
-        return ResponseEntity.ok("test");
-    }
-
-    /**
-     * 콘텐츠 저장
-     */
-    @PostMapping("/new/test")
-    public ResponseEntity<?> saveContents2(@RequestPart(required = false) ContentsTestRequest contentsRequest,
-                                           @RequestPart(required = false) MultipartFile book_cover,
+    public ResponseEntity<?> saveContents(@RequestPart(required = false) ContentsRequest content,
                                            @RequestPart(required = false) List<MultipartFile> contents_images)
             throws IOException {
         log.info("Contents controller: api/contents/new ---------------------");
+        // Contents 저장
+        Contents newContent = contentsService.saveContents(content);
 
-        return ResponseEntity.ok(contentsRequest);
+        // Contents file 저장
+        List<ContentsContentsfileDTO> contentsContentsfileDTOS = new ArrayList<>();
+        for (MultipartFile multipartFile: contents_images) {
+            Contentsfile contentsfile = s3Uploader.upload(newContent, multipartFile, "image");
+            contentsContentsfileDTOS.add(new ContentsContentsfileDTO(contentsfile.getId(), contentsfile.getPath()));
+        }
+
+        return ResponseEntity.ok(new ContentsDTO(newContent, contentsContentsfileDTOS));
     }
 
     /**
@@ -91,13 +87,6 @@ public class ContentsController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
-
-    // s3 업로드 테스트
-    @PostMapping("/photo/{contentsid}")
-    public ResponseEntity<?> uploadProfilePhoto(@PathVariable("contentsid") Long contentsId, @RequestParam("image") MultipartFile multipartFile)
-            throws IOException {
-        Contentsfile contentsfile = s3Uploader.upload(contentsId, multipartFile, "image");
-        return ResponseEntity.ok(contentsfile);
-    }
+    
 
 }

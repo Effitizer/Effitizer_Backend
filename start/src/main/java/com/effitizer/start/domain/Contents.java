@@ -1,9 +1,6 @@
 package com.effitizer.start.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -44,22 +41,24 @@ public class Contents extends BaseTimeEntity{
     @OneToMany(mappedBy = "contents", cascade = CascadeType.ALL)
     private List<Contentsfile> contentsfiles = new ArrayList<>();
 
+    @Builder
     public Contents(User user, Book book, String title, String content) {
-        this.user = user;
-        this.book = book;
         this.title = title;
         this.content = content;
+
+        this.setBook(book);
+        this.setUser(user);
     }
 
     //==연관관계 메서드==//
-    public void setContetnsfile(Contentsfile contetnsfile) {
-        this.contentsfiles.add(contetnsfile);
-        contetnsfile.setContents(this);
+    public void serBook(Book book) {
+        this.book = book;
+        book.getContents().add(this);
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
-        order.setContents(this);
+    public void setUser(User user) {
+        this.user = user;
+        user.getContents().add(this);
     }
 
 }

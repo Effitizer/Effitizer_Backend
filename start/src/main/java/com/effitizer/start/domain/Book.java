@@ -27,6 +27,9 @@ public class Book extends BaseTimeEntity{
     @JoinColumn(name = "category_id")
     private Category category; //카테고리 id
 
+    @OneToMany(mappedBy = "book")
+    private List<Contents> contents = new ArrayList<>();
+
     private String title; //제목
     private String isbn;
 
