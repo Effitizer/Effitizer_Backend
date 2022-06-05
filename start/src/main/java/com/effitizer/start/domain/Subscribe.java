@@ -20,7 +20,7 @@ public class Subscribe{
     @Column(name = "subscribe_id")
     private Long id; //  id
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user; // 회원 id
 

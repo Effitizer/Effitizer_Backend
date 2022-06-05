@@ -29,11 +29,19 @@ public class Bookcoverfile extends BaseTimeEntity {
 
     @Builder
     public Bookcoverfile(Book book, String real_name, String name, Long size, String path, String extend) {
-        this.book = book;
         this.real_name = real_name;
         this.name = name;
         this.size = size;
         this.path = path;
         this.extend = extend;
+
+        this.setBook(book);
+
+    }
+
+    //==연관관계 메서드==//
+    public void setBook(Book book) {
+        this.book = book;
+        book.setBookcoverfile(this);
     }
 }

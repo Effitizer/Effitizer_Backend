@@ -27,12 +27,19 @@ public class Contentsfile extends BaseTimeEntity {
 
     @Builder
     public Contentsfile(Contents contents, String real_name, String name, Long size, String path, String extend) {
-        this.contents = contents;
         this.real_name = real_name;
         this.name = name;
         this.size = size;
         this.path = path;
         this.extend = extend;
+
+        this.setContents(contents);
+    }
+
+    //==연관관계 메서드==//
+    public void setContents(Contents contents) {
+        this.contents = contents;
+        contents.getContentsfiles().add(this);
     }
 
 }

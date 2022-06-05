@@ -33,7 +33,7 @@ public class User extends BaseTimeEntity{
     @Column(nullable = false)
     private Boolean is_subscribed = false; //구독여부
 
-    @OneToOne(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     private Subscribe subscribe;
 
     @OneToMany(mappedBy = "user")

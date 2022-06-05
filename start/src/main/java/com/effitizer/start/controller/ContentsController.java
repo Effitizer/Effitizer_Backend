@@ -35,12 +35,12 @@ public class ContentsController {
      * 콘텐츠 저장
      */
     @PostMapping("/new")
-    public ResponseEntity<?> saveContents(@RequestPart(required = false) ContentsRequest content,
+    public ResponseEntity<?> saveContents(@RequestPart(required = false) ContentsRequest contents,
                                            @RequestPart(required = false) List<MultipartFile> contents_images)
             throws IOException {
         log.info("Contents controller: api/contents/new ---------------------");
         // Contents 저장
-        Contents newContent = contentsService.saveContents(content);
+        Contents newContent = contentsService.saveContents(contents);
 
         // Contents file 저장
         List<ContentsContentsfileDTO> contentsContentsfileDTOS = new ArrayList<>();
