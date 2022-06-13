@@ -1,5 +1,6 @@
 package com.effitizer.start.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,8 +31,9 @@ public class User extends BaseTimeEntity{
     @Column(nullable = false)
     private Boolean is_subscribed = false; //구독여부
 
-    @OneToOne(mappedBy = "user")
-    private Subscribe subscribe;
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference //순환참조 방지
+    private List<Subscribe> subscribes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<UserHistory> user_historys = new ArrayList<>();
@@ -59,6 +61,11 @@ public class User extends BaseTimeEntity{
     public void setContents(Contents contents) {
         this.contents.add(contents);
         contents.setUser(this);
+    }
+
+    public void setSubscribes(Subscribe subscribes) {
+        this.subscribes.add(subscribes);
+        subscribes.setUser(this);
     }
 
     public void setUser_history(UserHistory user_history) {

@@ -1,5 +1,6 @@
 package com.effitizer.start.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,9 +20,11 @@ public class Subscribe{
     @Column(name = "subscribe_id")
     private Long id; //  id
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
     @JoinColumn(name = "user_id")
     private User user; // 회원 id
+
 
     @OneToMany(mappedBy = "subscribe", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
@@ -31,13 +34,17 @@ public class Subscribe{
     private LocalDateTime canceled_data; // 결제 중단일
 
     //==연관관계 메서드==//
-    public void setUser(User user) {
-        this.user = user;
-        user.setSubscribe(this);
-    }
+
 
     public void setPayment(Payment payment) {
         this.payments.add(payment);
         payment.setSubscribe(this);
+    }
+
+    public Subscribe(User user, LocalDateTime start_date, LocalDateTime expired_date, LocalDateTime canceled_data){
+        this.user=user;
+        this.start_date=start_date;
+        this.expired_date=expired_date;
+        this.canceled_data=canceled_data;
     }
 }
