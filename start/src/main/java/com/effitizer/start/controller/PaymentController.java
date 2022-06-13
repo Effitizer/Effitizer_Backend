@@ -7,6 +7,10 @@ import com.effitizer.start.domain.User;
 import com.effitizer.start.domain.dto.Group.GroupDTO;
 import com.effitizer.start.domain.dto.Payment.PaymentDTO;
 import com.effitizer.start.domain.dto.Payment.Request.PaymentRequest;
+import com.effitizer.start.domain.dto.Subscribe.SubscribeDTO;
+import com.effitizer.start.repository.PaymentRepository;
+import com.effitizer.start.service.Payment.PaymentService;
+import com.effitizer.start.service.SubscribeService;
 import com.effitizer.start.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -22,10 +26,12 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping("/api/payment")
+@RequestMapping("/test/api/payment")
 public class PaymentController {
     @Autowired ReqPaymentScheduler scheduler;
     @Autowired UserService userService;
+    @Autowired SubscribeService subscribeService;
+    @Autowired PaymentService paymentService;
 
     @GetMapping("/test/pay")
     public String goPay(Model model) {
@@ -39,13 +45,12 @@ public class PaymentController {
         log.info("Payment controller: /payment/new ---------------------");
         // 구독 데이터 생성
         User user = userService.findUserById(paymentRequest.getUser_id());
-        Subscribe subscribe = Subscribe.builder()
-                .user(user)
-                .start_date(LocalDateTime.now())
-                .build();
+        log.info("Payment controller: /payment/new ---------------------"+user.toString());
+        log.info("Payment controller: /payment/new ---------------------"+user.getId());
+        Subscribe subscribe = subscribeService.saveSubscribe(user);
 
         // 결제 데이터 생성
-        Payment payment = new Payment(paymentRequest, subscribe);
+        Payment payment = paymentService.savePayment(paymentRequest, subscribe);
         PaymentDTO paymentDTO = new PaymentDTO(payment);
 
         // 정기 결제를 위한 스케줄러 생성
@@ -53,13 +58,4 @@ public class PaymentController {
         return ResponseEntity.ok(paymentDTO);
     }
 
-    @PostMapping("/test/payment1")
-    @ResponseBody
-    public void getImportToken(@RequestBody PaymentRequest paymentRequest)
-            throws JsonMappingException, JsonProcessingException {
-        log.info("------------- payment controller -> payment1");
-        String customer_uid = paymentRequest.getCustomer_uid();
-        int price = paymentRequest.getPaid_amount();
-
-    }
 }

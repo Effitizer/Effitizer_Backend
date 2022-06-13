@@ -3,7 +3,10 @@ import java.util.Date;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+import com.effitizer.start.domain.Payment;
+import com.effitizer.start.service.Payment.PaymentService;
 import com.effitizer.start.service.Payment.SchedulePaymentService;
+import com.effitizer.start.service.SubscribeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.Trigger;
@@ -17,6 +20,8 @@ public class ReqPaymentScheduler {
     //스케줄러
     private ThreadPoolTaskScheduler scheduler;
     @Autowired SchedulePaymentService setSchedulePay;
+    @Autowired PaymentService paymentService;
+    @Autowired SubscribeService subscribeService;
 
     public void stopScheduler() {
         //구독 취소 시 scheduler shutdown을 통해 결제 요청 멈춤
@@ -50,11 +55,14 @@ public class ReqPaymentScheduler {
         return () -> {
             String scheduleData = setSchedulePay.schedulePay(customer_uid, price);
             log.info("---------------------- ReqPaymentScheduler----------------------: -> 스케줄 예약 : "+scheduleData);
+
+            // 정기 결제 데이터 업데이트
+            Payment payment = paymentService.saveRegularPayment(scheduleData);
         };
     }
 
     private Trigger getTrigger() {
         // 작업 주기 설정
-        return new PeriodicTrigger(30, TimeUnit.DAYS);
+        return new PeriodicTrigger(5, TimeUnit.MINUTES);
     }
 }

@@ -34,7 +34,7 @@ public class User extends BaseTimeEntity{
     private Boolean is_subscribed = false; //구독여부
 
     @OneToMany(mappedBy = "user")
-    private Subscribe subscribe;
+    private List<Subscribe> subscribe = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<User_history> user_historys = new ArrayList<>();

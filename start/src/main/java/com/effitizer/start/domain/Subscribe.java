@@ -43,6 +43,6 @@ public class Subscribe{
     //==연관관계 메서드==//
     public void setUser(User user) {
         this.user = user;
-        user.setSubscribe(this);
+        user.getSubscribe().add(this);
     }
 }
