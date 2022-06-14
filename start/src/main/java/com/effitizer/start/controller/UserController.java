@@ -45,7 +45,7 @@ import java.io.IOException;
 
 @Slf4j
 @Controller
-@RequestMapping("test/api/user")
+@RequestMapping("api/user")
 public class UserController {
 
 
@@ -99,6 +99,7 @@ public class UserController {
         }
 
     }
+
     @PutMapping("/subscription/renew")
     public ResponseEntity<?> saveSubscription(){
         try {

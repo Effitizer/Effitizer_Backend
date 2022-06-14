@@ -7,6 +7,7 @@ import com.effitizer.start.domain.dto.Payment.Request.PaymentRequest;
 import com.effitizer.start.repository.PaymentRepository;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +27,20 @@ public class PaymentService {
     /**
      *  정기결제 데이터 저장
      */
-    public Payment saveRegularPayment(String scheduleData) {
-        // stirng을 json 데이터로 변경
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-        Gson gson = builder.create();
-        PaymentRegularRequest paymentRegularRequest = gson.fromJson(scheduleData, PaymentRegularRequest.class);
+    public Payment saveRegularPayment(Subscribe subscribe, JSONObject newPaymentData) {
+        // 이전 결제 정보 가져오기
+        Payment prePayment = paymentRepository.findBySubscribe(subscribe).get(0);
+        String imp_uid = (String) newPaymentData.get("imp_uid");
+        String merchant_uid = (String) newPaymentData.get("merchant_uid");
 
-        Payment payment = new Payment();
+        // 새로운 결제 정보 저장
+        Payment payment = Payment.builder()
+                        .prePayment(prePayment)
+                        .subscribe(subscribe)
+                        .imp_uid(imp_uid)
+                        .merchant_uid(merchant_uid)
+                        .build();
+        paymentRepository.save(payment);
         return payment;
     }
 }

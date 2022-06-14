@@ -24,9 +24,8 @@ import java.time.LocalDateTime;
 @Service
 @Transactional
 public class SubscribeService {
-
-    @Autowired
-    SubscribeRepository subscribeRepository;
+    @Autowired SubscribeRepository subscribeRepository;
+    @Autowired UserService userService;
 
     public List<Subscribe> findSubscribesByUserId(Long user_id) {
         return subscribeRepository.findByUserId(user_id);
@@ -71,6 +70,16 @@ public class SubscribeService {
     public Subscribe findSubscribeById(Long subscribe_id) {
         return subscribeRepository.findById(subscribe_id)
                 .orElse(null);
+    }
+
+    /**
+     * Subscribe 구독 갱신 시 데이터 업데이트
+     */
+    public Subscribe updateSubscribe(String userEmail){
+        User user = userService.findUserByEmail(userEmail);
+        Subscribe subscribe = subscribeRepository.findByUserOrderByCanceled_dataDesc(user).get(0);
+        subscribe.setExpired_date(subscribe.getExpired_date().plusDays(30));
+        return subscribe;
     }
 
     /**
