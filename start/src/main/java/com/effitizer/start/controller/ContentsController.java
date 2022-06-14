@@ -4,7 +4,7 @@ import com.effitizer.start.aws.S3Uploader;
 import com.effitizer.start.config.auth.dto.SessionUser;
 import com.effitizer.start.domain.*;
 import com.effitizer.start.domain.dto.Contents.*;
-import com.effitizer.start.domain.dto.Contents.Request.AllContentsRequest;
+import com.effitizer.start.domain.dto.Contents.Contentsfile.ContentsContentsfileDTO;
 import com.effitizer.start.domain.dto.Contents.Request.ContentsRequest;
 import com.effitizer.start.domain.dto.Contents.Request.OnlyContentsRequest;
 import com.effitizer.start.error.ErrorResponse;
@@ -21,12 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("test/api/contents")
+@RequestMapping("api/contents")
 public class ContentsController {
     @Autowired ContentsService contentsService;
     @Autowired BookService bookService;
@@ -37,22 +38,38 @@ public class ContentsController {
      * 콘텐츠 저장
      * ADMIN만 가능
      */
-    @PostMapping("/new")
-    public ResponseEntity<?> saveContents(@RequestBody AllContentsRequest contentsRequest) throws IOException {
-        log.info("Contents controller: api/contents/new ---------------------");
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-        Long userId= userService.findUserByName(sessionUser.getName()).getId();
-        if(sessionUser.getRole().equals(Role.GUEST))
-            return ResponseEntity.ok("Guest cannot create new contents! ");
-
-        LinkedList<ContentsRequest> contentsRequestLinkedList = new LinkedList<>();
-        contentsRequestLinkedList.addAll(contentsRequest.getContents());
-        Book book = bookService.saveBook(contentsRequest.getIsbn(), contentsRequest.getTitle(), contentsRequest.getWriter(), contentsRequest.getPublisher(), contentsRequest.getCategory_id());
-        User user = userService.findUserById(userId);
-        List<OnlyContentsDTO> contentsDTOList = contentsService.saveContents(contentsRequestLinkedList, user, book);
-        AllContentsDTO allContentsDTO = new AllContentsDTO(book, contentsDTOList);
-        return ResponseEntity.ok(allContentsDTO);
-    }
+//    @PostMapping("/new")
+//    public ResponseEntity<?> saveContents(@RequestPart(required = false) ContentsRequest contents,
+//                                           @RequestPart(required = false) List<MultipartFile> contents_images)
+//            throws IOException {
+//        log.info("Contents controller: api/contents/new ---------------------");
+//
+//        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+//        Long userId= userService.findUserByName(sessionUser.getName()).getId();
+//        if(sessionUser.getRole().equals(Role.GUEST))
+//            return ResponseEntity.ok("Guest cannot create new contents! ");
+//
+//        LinkedList<ContentsRequest> contentsRequestLinkedList = new LinkedList<>();
+//        contentsRequestLinkedList.addAll(contents.getContent());
+//        Book book = bookService.saveBook(contents.getIsbn(), contents.getTitle(), contents.getWriter(), contents.getPublisher(), contents.getCategory_id());
+//        User user = userService.findUserById(userId);
+////        List<OnlyContentsDTO> contentsDTOList = contentsService.saveContents(contentsRequestLinkedList, user, book);
+////        AllContentsDTO allContentsDTO = new AllContentsDTO(book, contentsDTOList);
+//        return ResponseEntity.ok(allContentsDTO);
+//
+//        // Contents 저장
+//        Contents newContent = contentsService.saveContents(contents);
+//
+//        // Contents file 저장
+//        List<ContentsContentsfileDTO> contentsContentsfileDTOS = new ArrayList<>();
+//        for (MultipartFile multipartFile: contents_images) {
+//            Contentsfile contentsfile = s3Uploader.upload(newContent, multipartFile, "image");
+//            contentsContentsfileDTOS.add(new ContentsContentsfileDTO(contentsfile.getId(), contentsfile.getPath()));
+//        }
+//
+//        return ResponseEntity.ok(new ContentsDTO(newContent, contentsContentsfileDTOS));
+//
+//    }
 
     /**
      * 콘텐츠 id로 콘텐츠 조회
@@ -62,7 +79,8 @@ public class ContentsController {
         try {
             log.info("Contents controller: api/contents/{contents_id}---------------------");
             // test용 데이터
-            Book book = bookService.saveOne(new Book(new Publisher("publisher"), new Writer("writer"), new Category("science"), "string", "string"));
+            //Book book = bookService.saveOne(new Book(new Publisher("publisher"), new User("user"), new Category("science"), "string", "string"));
+            Book book = new Book();
             Contents test_contents = contentsService.saveOne(new Contents(new User("name", "email", Role.USER), book, "title", "content"));
 
             Contents contents = contentsService.findContensById(contents_id);
@@ -93,12 +111,5 @@ public class ContentsController {
         }
     }
 
-    // s3 업로드 테스트
-    @PostMapping("/photo/{contentsid}")
-    public ResponseEntity<?> uploadProfilePhoto(@PathVariable("contentsid") Long contentsId, @RequestParam("image") MultipartFile multipartFile)
-            throws IOException {
-        Contentsfile contentsfile = s3Uploader.upload(contentsId, multipartFile, "image");
-        return ResponseEntity.ok(contentsfile);
-    }
 
 }

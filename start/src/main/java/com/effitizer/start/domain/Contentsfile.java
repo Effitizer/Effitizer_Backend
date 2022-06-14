@@ -1,8 +1,6 @@
 package com.effitizer.start.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,6 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Contentsfile extends BaseTimeEntity {
     @Id
     @GeneratedValue
@@ -26,10 +25,21 @@ public class Contentsfile extends BaseTimeEntity {
     private String path; // 파일경로
     private String extend; // 파일확장자
 
-    public Contentsfile(Contents contents, String real_name, String name) {
-        this.contents = contents;
+    @Builder
+    public Contentsfile(Contents contents, String real_name, String name, Long size, String path, String extend) {
         this.real_name = real_name;
         this.name = name;
+        this.size = size;
+        this.path = path;
+        this.extend = extend;
+
+        this.setContents(contents);
+    }
+
+    //==연관관계 메서드==//
+    public void setContents(Contents contents) {
+        this.contents = contents;
+        contents.getContentsfiles().add(this);
     }
 
 }

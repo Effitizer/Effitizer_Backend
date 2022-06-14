@@ -24,10 +24,17 @@ public class CategoryService {
                     throw new IllegalStateException("이미 존재하는 데이터입니다.");
                 });
 
-        Category category  = new Category();
-        category.setName(name);
+        Category category  = new Category(name);
         categoryRepository.save(category);
         return category;
+    }
+
+    /**
+     * id로 Category 조회
+     */
+    public Category findCategoryById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalStateException("카테고리 정보가 올바르지 않습니다."));
     }
 
     /**

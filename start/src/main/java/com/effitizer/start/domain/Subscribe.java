@@ -1,6 +1,9 @@
 package com.effitizer.start.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import lombok.Builder;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,14 +36,27 @@ public class Subscribe{
     private LocalDateTime expired_date; //만료일
     private LocalDateTime canceled_data; // 결제 중단일
 
-    //==연관관계 메서드==//
+//    @Builder
+//    public Subscribe(User user, LocalDateTime start_date, LocalDateTime expired_date, LocalDateTime canceled_data) {
+//        this.start_date = start_date;
+//        this.expired_date = expired_date;
+//        this.canceled_data = canceled_data;
+//
+//        this.setUser(user);
+//    }
 
+    //==연관관계 메서드==//
 
     public void setPayment(Payment payment) {
         this.payments.add(payment);
         payment.setSubscribe(this);
     }
+//    public void setUser(User user) {
+//        this.user = user;
+//        user.getSubscribe().add(this);
+//    }
 
+    @Builder
     public Subscribe(User user, LocalDateTime start_date, LocalDateTime expired_date, LocalDateTime canceled_data){
         this.user=user;
         this.start_date=start_date;

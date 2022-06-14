@@ -1,7 +1,6 @@
 package com.effitizer.start.domain.dto.Group;
 
 import com.effitizer.start.domain.Group;
-import com.effitizer.start.domain.dto.Group.Book.GroupBookDTO;
 import com.effitizer.start.domain.dto.Group.Contents.GroupContentsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

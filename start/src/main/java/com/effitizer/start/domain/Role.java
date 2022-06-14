@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter @RequiredArgsConstructor
 public enum Role {
-    GUEST("ROLE_GUEST", "손님"),
+    WRITER("ROLE_WRITER", "작가"),
     ADMIN("ROLE_ADMIN", "관리자"),
     USER("ROLE_USER", "일반 사용자");
 

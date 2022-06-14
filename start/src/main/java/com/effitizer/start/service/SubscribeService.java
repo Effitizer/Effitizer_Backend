@@ -4,20 +4,27 @@ import com.effitizer.start.domain.Contents;
 import com.effitizer.start.domain.Contentsfile;
 import com.effitizer.start.domain.Subscribe;
 
+import com.effitizer.start.domain.Subscribe;
+
 import com.effitizer.start.domain.User;
 import com.effitizer.start.repository.SubscribeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.time.LocalDateTime;
+
+
 @Service
 @Transactional
 public class SubscribeService {
+
     @Autowired
     SubscribeRepository subscribeRepository;
 
@@ -42,14 +49,36 @@ public class SubscribeService {
         subscribeRepository.save(subscribe);
     }
 
-//    public Contents saveOne(Contents contents) {
-//        userRepository.save(contents.getUser());
-//        contentsRepository.save(contents);
-//        contents.setOrder(orderService.saveOrder(contents, 1));
-//        Contentsfile contentsfile = contentsfileRepository.save(new Contentsfile());
-//        List<Contentsfile> contentsfileList = new ArrayList<>();
-//        contentsfileList.add(contentsfile);
-//        contents.setContentsfiles(contentsfileList);
-//        return contents;
-//    }
+
+    /**
+     * Subscribe 저장
+     */
+    public Subscribe saveSubscribe(User user) {
+        LocalDateTime nowTime = LocalDateTime.now();
+        Subscribe subscribe = Subscribe.builder()
+                .user(user)
+                .start_date(nowTime)
+                .expired_date(nowTime.plusDays(30))
+                .build();
+        subscribeRepository.save(subscribe);
+        return subscribe;
+    }
+
+    /*
+    id로 Subscribe 조회
+     */
+    public Subscribe findSubscribeById(Long subscribe_id) {
+        return subscribeRepository.findById(subscribe_id)
+                .orElse(null);
+    }
+
+    /**
+     * Subscribe 구독 중단시키기
+     */
+    public Subscribe updateExpire(Long subscribe_id){
+        Subscribe subscribe = findSubscribeById(subscribe_id);
+        subscribe.setCanceled_data(LocalDateTime.now());
+        return subscribe;
+    }
+
 }

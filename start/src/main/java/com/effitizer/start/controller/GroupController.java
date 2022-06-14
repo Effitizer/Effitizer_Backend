@@ -23,7 +23,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("test/api/group")
+@RequestMapping("api/group")
 public class GroupController {
     @Autowired GroupService groupService;
 
@@ -63,31 +63,29 @@ public class GroupController {
      */
     @GetMapping("")
     public ResponseEntity<?> sendAllGroupList() {
-
-        log.info("Group controller: /api/group ---------------------");
-        List<Group> groupList= groupService.findAllGroupList();
-        List<AllGroupDTO> allGroupDTOList = new ArrayList<>();
-        for(int i=0; i<groupList.size(); i++) {
-            Group group = groupList.get(i);
-            List<Contents> contentsList = group.getContents();
-            List<GroupContentsDTO> groupContentsDTOList = new ArrayList<>();
-            log.info("Group controller: /api/group ---------------------"+ contentsList.size());
-            for(int j=0; j<contentsList.size();j++) {
-                //Content 설정
-                Contents contents = contentsList.get(j);
-                GroupContentsDTO groupContentsDTO = new GroupContentsDTO(contents);
-                groupContentsDTOList.add(groupContentsDTO);
+        try {
+            log.info("Group controller: /api/group ---------------------");
+            List<Group> groupList = groupService.findAllGroupList();
+            List<AllGroupDTO> allGroupDTOList = new ArrayList<>();
+            for (int i = 0; i < groupList.size(); i++) {
+                Group group = groupList.get(i);
+                List<Contents> contentsList = group.getContents();
+                List<GroupContentsDTO> groupContentsDTOList = new ArrayList<>();
+                for (int j = 0; j < contentsList.size(); j++) {
+                    //Content 설정
+                    Contents contents = contentsList.get(j);
+                    GroupContentsDTO groupContentsDTO = new GroupContentsDTO(contents);
+                    groupContentsDTOList.add(groupContentsDTO);
+                }
+                // Group 설정
+                AllGroupDTO allGroupDTO = new AllGroupDTO(group, groupContentsDTOList);
+                allGroupDTOList.add(allGroupDTO);
             }
-            // Group 설정
-            AllGroupDTO allGroupDTO = new AllGroupDTO(group, groupContentsDTOList);
-            allGroupDTOList.add(allGroupDTO);
+            return ResponseEntity.ok(allGroupDTOList);
         }
-        return ResponseEntity.ok(allGroupDTOList);
-
-        /*
         catch (Exception e){
             ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }*/
+        }
     }
 }
