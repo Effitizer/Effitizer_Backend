@@ -1,6 +1,8 @@
 package com.effitizer.start.controller;
 
+import com.effitizer.start.config.auth.dto.SessionUser;
 import com.effitizer.start.domain.Category;
+import com.effitizer.start.domain.Role;
 import com.effitizer.start.domain.dto.Category.CategoryDTO;
 import com.effitizer.start.domain.dto.Category.Request.CategoryRequest;
 import com.effitizer.start.error.ErrorResponse;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("api/category")
 public class CategoryController {
     @Autowired CategoryService categoryService;
-
+    @Autowired HttpSession httpSession;
     /**
      * 카테고리 리스트 조회
      */
@@ -44,12 +47,19 @@ public class CategoryController {
 
     /**
      * 카테고리 저장
+     * ADMIN만 가능
      */
     @PostMapping("/new")
     public ResponseEntity<?> saveCategory(@RequestBody CategoryRequest categoryRequest) {
         try {
             log.info("Category controller: /api/category/new ---------------------");
-            Category category = categoryService.saveCategory(categoryRequest.getName());
+            Category category = new Category();
+            SessionUser user = (SessionUser) httpSession.getAttribute("user");
+
+            if(!user.getRole().equals(Role.ADMIN))
+                return new ResponseEntity<>("Only admin can create category", HttpStatus.BAD_REQUEST);
+            else
+                category = categoryService.saveCategory(categoryRequest.getName());
             return new ResponseEntity<>(new CategoryDTO(category), HttpStatus.OK);
         }
         catch (IllegalStateException e) {

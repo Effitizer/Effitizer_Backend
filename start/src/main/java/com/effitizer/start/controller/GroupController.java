@@ -29,6 +29,7 @@ public class GroupController {
 
     /**
      * 그룹 저장
+     * ADMIN 만 가능
      */
     @PostMapping("/new")
     public ResponseEntity<?> saveGroup(@RequestBody GroupRequest groupRequest) {

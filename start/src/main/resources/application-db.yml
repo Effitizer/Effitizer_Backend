@@ -3,4 +3,4 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     url: jdbc:mysql://localhost:3306/effitizer?useUnicode=true&characterEncoding=utf8
-    password: ''
+    password:

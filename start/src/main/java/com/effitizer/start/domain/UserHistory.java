@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-public class User_history {
+public class UserHistory {
     @Id
     @GeneratedValue
     @Column(name = "user_history_id")
@@ -25,7 +25,7 @@ public class User_history {
     private String access_name; // 접근 이름
     private String access_path; // 접근 경로
     private String ip_address; // 아이피 주소
-    private LocalDateTime login_date; // 로그인 날짜
+    private String login_date; // 로그인 날짜
     private String os_type; // os 종류
-    private String session_lastaccess; // 세션 마지막 접소
+    private String session_lastaccess; // 세션 마지막 접속
 }
