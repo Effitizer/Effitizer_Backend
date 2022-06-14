@@ -21,7 +21,6 @@ public class ReqPaymentScheduler {
     private ThreadPoolTaskScheduler scheduler;
     @Autowired SchedulePaymentService setSchedulePay;
     @Autowired PaymentService paymentService;
-    @Autowired SubscribeService subscribeService;
 
     public void stopScheduler() {
         //구독 취소 시 scheduler shutdown을 통해 결제 요청 멈춤
@@ -46,6 +45,7 @@ public class ReqPaymentScheduler {
     }
 
     private Runnable getRunnable(String customer_uid, int price){
+        // 계속해서 구독 id를 가지고 있도록 -> 그래서 거기서 customer_uid와 price를 사용하도록하기
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -57,7 +57,7 @@ public class ReqPaymentScheduler {
             log.info("---------------------- ReqPaymentScheduler----------------------: -> 스케줄 예약 : "+scheduleData);
 
             // 정기 결제 데이터 업데이트
-            Payment payment = paymentService.saveRegularPayment(scheduleData);
+            //Payment payment = paymentService.saveRegularPayment(scheduleData);
         };
     }
 
