@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+
+<button type="button" onclick="kakaopay()"> 버튼내용 </button>
+
+<script>
+	function kakaopay(){
+		var IMP = window.IMP;
+		IMP.init('imp11036589'); // 가맹점 식별코드
+		IMP.request_pay({
+			pay_method : 'card', // 결제창 호출단계에서의 pay_method는 아무런 역할을 하지 못하며, 구매자가 카카오페이 앱 내에서 신용카드 vs 카카오머니 중 실제 선택한 값으로 추후 정정됩니다.
+			merchant_uid : new Date().getTime(),
+			name : 'EffitizerTest',
+			amount : 100, // 결제 요청 금액
+			customer_uid : "gildong_0001_1234", //customer_uid 파라메터가 있어야 빌링키 발급이 정상적으로 이뤄집니다. -> 카드(빌링키)와 1:1로 대응하는 값
+			buyer_email : 'iamport@siot.do',
+			buyer_name : '아임포트',
+			buyer_tel : '02-1234-1234'
+		}, function(rsp) {
+		    console.log(rsp);
+			if ( rsp.success ) {
+				var result = {
+				    "user_id": 2,
+				    "customer_uid": rsp.customer_uid,
+					"imp_uid" : rsp.imp_uid,
+					"buyer_name": rsp.buyer_name,
+					"merchant_uid" : rsp.merchant_uid,
+					"buyer_email" : rsp.buyer_email,
+					"paid_date" : new Date().getTime(),
+					"paid_amount" : rsp.paid_amount,
+					"apply_num": rsp.apply_num,
+					"card_name": rsp.card_name,
+					"card_num" : rsp.apply_num,
+					"currency": rsp.currency,
+					"receipt_url": rsp.receipt_url,
+					"pg_provider": rsp.pg_provider,
+
+				}
+				$.ajax({
+					url:'/test/api/payment/new',
+					type : 'POST',
+				        data : JSON.stringify(result,
+				        		['user_id', 'customer_uid', 'imp_uid', 'merchant_uid', 'buyer_email',
+				        			'paid_date', 'paid_amount', 'apply_num', 'card_name', 'card_num',
+				        			'currency', 'receipt_url', 'pg_provider']),
+				        contentType:'application/json;charset=utf-8',
+				        dataType: 'json',
+					success:function(res) {
+						console.log("결제 데이터 저장 성공!! :))");
+					},
+				    error:function(){
+				          console.log("Insert ajax 통신 실패!!!");
+				    }
+				});
+			} else {
+				alert('빌링키 발급 실패');
+				}
+			});
+	}
+
+</script>
+
+</body>
+</html>
