@@ -18,6 +18,6 @@ public class AllContentsRequest {
     private String writer;
     private String publisher;
     private Long category_id;
-    private Long user_id;
+   // private Long user_id;
     private List<ContentsRequest> contents;
 }

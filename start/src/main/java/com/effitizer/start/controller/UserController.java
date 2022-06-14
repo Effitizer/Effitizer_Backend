@@ -66,6 +66,7 @@ public class UserController {
 
         try {
             SessionUser user = (SessionUser) httpSession.getAttribute("user");
+
             Long userId= userService.findUserByName(user.getName()).getId();
             Subscribe subscribe = subscribeService.findSubscribeByUserId(userId);
             return ResponseEntity.ok(new SubscribeDTO(subscribe));
