@@ -26,9 +26,4 @@ public class Category extends BaseTimeEntity{
         this.name = name;
     }
 
-    //==연관관계 메서드==//
-    public void setBook(Book book) {
-        this.books.add(book);
-        book.setCategory(this);
-    }
 }

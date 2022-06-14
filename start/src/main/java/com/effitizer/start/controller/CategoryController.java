@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
-@RequestMapping("test/api/category")
+@RequestMapping("api/category")
 public class CategoryController {
     @Autowired CategoryService categoryService;
 
@@ -53,6 +53,7 @@ public class CategoryController {
             return new ResponseEntity<>(new CategoryDTO(category), HttpStatus.OK);
         }
         catch (IllegalStateException e) {
+            // 동일한 이름이 이미 존재할 경우
             ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
         }

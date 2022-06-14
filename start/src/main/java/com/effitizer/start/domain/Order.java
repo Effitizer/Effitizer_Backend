@@ -26,7 +26,7 @@ public class Order extends BaseTimeEntity{
 
     public Order(int order_num, Contents contents) {
         this.order_num = order_num;
-        this.contents = contents;
+
         setConsumer(contents);
     }
 

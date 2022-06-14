@@ -33,14 +33,17 @@ public class User extends BaseTimeEntity{
     @Column(nullable = false)
     private Boolean is_subscribed = false; //구독여부
 
-    @OneToOne(mappedBy = "user")
-    private Subscribe subscribe;
+    @OneToMany(mappedBy = "user")
+    private List<Subscribe> subscribe = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<User_history> user_historys = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Contents> contents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "writer")
+    private List<Book> books = new ArrayList<>();
 
     @Builder
     public User(String name, String email, Role role){

@@ -1,47 +1,53 @@
 package com.effitizer.start.service;
 
-import com.effitizer.start.domain.Book;
-import com.effitizer.start.domain.Category;
-import com.effitizer.start.domain.Publisher;
-import com.effitizer.start.domain.Writer;
+import com.effitizer.start.domain.*;
+import com.effitizer.start.domain.dto.Book.Request.BookRequest;
 import com.effitizer.start.repository.BookRepository;
 import com.effitizer.start.repository.CategoryRepository;
-import com.effitizer.start.repository.PublisherRepository;
-import com.effitizer.start.repository.WriterRepository;
+import com.effitizer.start.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @Transactional
 public class BookService {
     @Autowired BookRepository bookRepository;
-    @Autowired WriterService writerService;
+    @Autowired UserService userService;
     @Autowired PublisherService publisherService;
-    @Autowired CategoryRepository categoryRepository;
-
-    public Book saveOne(Book book) {
-        writerService.saveOne(book.getWriter());
-        publisherService.saveOne(book.getPublisher());
-        categoryRepository.save(book.getCategory());
-        return bookRepository.save(book);
-    }
+    @Autowired CategoryService categoryService;
 
 
-    public Book saveBook(String isbn, String title, String writer_name, String publisher_name, Long category_id) {
-        // writer id 조회 -> 없으면 생성
-        Writer writer = writerService.saveWriterOrFind(writer_name);
-        // publisher id 조회 -> 없으면 생성
-        Publisher publisher = publisherService.savePublisherOrFind(publisher_name);
+    /**
+     * Book 저장
+     */
+    public Book saveBook(BookRequest bookRequest) {
+        // writer id 조회
+        User writer = userService.findUserById(bookRequest.getWriter_id());
+        if (writer.getRole() != Role.WRITER) {
+            throw new IllegalStateException("작가 정보가 올바르지 않습니다.");
+        }
+        // publisher 조회
+        Publisher publisher = publisherService.findPublisherById(bookRequest.getPublisher_id());
         // category 조회
-        Category category = categoryRepository.findById(category_id)
-                .orElse(null);
-
+        Category category = categoryService.findCategoryById(bookRequest.getCategory_id());
         // 책 생성
-        Book book = new Book(publisher, writer, category, title, isbn);
+        Book book = Book.builder()
+                    .user(writer)
+                    .publisher(publisher)
+                    .category(category)
+                    .isbn(bookRequest.getIsbn())
+                    .title(bookRequest.getTitle())
+                    .build();
         bookRepository.save(book);
         return book;
+    }
+
+    /**
+     * isbn으로 Book 조회
+     */
+    public Book findBookByIsbn(String isbn){
+        return bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new IllegalStateException("책 정보가 올바르지 않습니다."));
     }
 }
