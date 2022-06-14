@@ -26,19 +26,25 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping("/test/api/payment")
+@RequestMapping("/api/payment")
 public class PaymentController {
     @Autowired ReqPaymentScheduler scheduler;
     @Autowired UserService userService;
     @Autowired SubscribeService subscribeService;
     @Autowired PaymentService paymentService;
 
+    /**
+     * 테스트용 결제 페이지 이동
+     */
     @GetMapping("/test/pay")
     public String goPay(Model model) {
         log.info("------------- payment controller -> pay");
         return "payTest";
     }
 
+    /**
+     * 결제 데이터 생성 및 결제에 대한 구독 생성
+     */
     @PostMapping("/new")
     @ResponseBody
     public ResponseEntity<?> savePayment(@RequestBody PaymentRequest paymentRequest) {

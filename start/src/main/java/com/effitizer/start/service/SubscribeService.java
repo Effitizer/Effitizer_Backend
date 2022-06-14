@@ -31,6 +31,7 @@ public class SubscribeService {
     public List<Subscribe> findSubscribesByUserId(Long user_id) {
         return subscribeRepository.findByUserId(user_id);
     }
+
     public Subscribe findSubscribeByUserId(Long user_id) {
         return subscribeRepository.findFirstByUserIdOrderByIdDesc(user_id)
                 .orElse(null);
@@ -64,8 +65,8 @@ public class SubscribeService {
         return subscribe;
     }
 
-    /*
-    id로 Subscribe 조회
+    /**
+    * id로 Subscribe 조회
      */
     public Subscribe findSubscribeById(Long subscribe_id) {
         return subscribeRepository.findById(subscribe_id)
