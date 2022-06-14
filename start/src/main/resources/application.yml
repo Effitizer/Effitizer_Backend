@@ -21,6 +21,10 @@ spring:
       max-request-size: 20MB
 logging:
   level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
     org:
       hibernate:
         type:

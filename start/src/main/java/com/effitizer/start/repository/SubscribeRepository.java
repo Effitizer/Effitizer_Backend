@@ -17,6 +17,6 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 
     Optional<Subscribe> findFirstByUserIdOrderByIdDesc(Long userId);
 
-    List<Subscribe> findByUserOrderByCanceled_dataDesc(User user);
+    List<Subscribe> findByUserOrderByCanceledDataDesc(User user);
 
 }

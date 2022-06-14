@@ -18,6 +18,6 @@ public class SubscribeDTO {
         this.id = subscribe.getId();
         this.start_date = subscribe.getStart_date();
         this.expired_date = subscribe.getExpired_date();
-        this.canceled_date = subscribe.getCanceled_data();
+        this.canceled_date = subscribe.getCanceledData();
     }
 }
