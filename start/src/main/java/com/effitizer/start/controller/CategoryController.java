@@ -58,8 +58,10 @@ public class CategoryController {
 
             if(!user.getRole().equals(Role.ADMIN))
                 return new ResponseEntity<>("Only admin can create category", HttpStatus.BAD_REQUEST);
-            else
+            else{
                 category = categoryService.saveCategory(categoryRequest.getName());
+            }
+
             return new ResponseEntity<>(new CategoryDTO(category), HttpStatus.OK);
         }
         catch (IllegalStateException e) {
