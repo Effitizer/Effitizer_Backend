@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ContentsContentsfileDTO {
-    private Long id;
-    private String image_path;
+    private Long contents_image_id;
+    private Long size;
+    private String extend;
+    private String path;
 }

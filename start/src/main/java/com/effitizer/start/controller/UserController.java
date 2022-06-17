@@ -46,6 +46,7 @@ public class UserController {
 
         // user 권한 작가로 변경
         User user = userService.changeRole(userSession.getEmail(), "writer");
+        httpSession.setAttribute("user", user);
         return ResponseEntity.ok(new UserDTO(user));
     }
 
@@ -60,6 +61,7 @@ public class UserController {
 
         // user 권한 작가로 변경
         User user = userService.changeRole(userSession.getEmail(), "admin");
+        httpSession.setAttribute("user", user);
         return ResponseEntity.ok(new UserDTO(user));
     }
 

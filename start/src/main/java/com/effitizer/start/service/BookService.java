@@ -22,6 +22,13 @@ public class BookService {
      * Book 저장
      */
     public Book saveBook(BookRequest bookRequest) {
+        // 동일한 isbn이 있는지 조회
+        Book checkBook = bookRepository.findByIsbn(bookRequest.getIsbn())
+                .orElse(null);
+        if (checkBook != null) {
+            throw new IllegalStateException("동일한 isbn의 책이 존재합니다.");
+        }
+
         // writer id 조회
         User writer = userService.findUserById(bookRequest.getWriter_id());
         if (writer.getRole() != Role.WRITER) {
