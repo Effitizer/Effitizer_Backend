@@ -33,8 +33,8 @@ public class UserService {
      * 사용자의 ROLE를 변경
      * @param newRole 변경될 ROLE
      */
-    public User changeRole(Long user_id, String newRole) {
-        User user = userRepository.getById(user_id);
+    public User changeRole(String userEmail, String newRole) {
+        User user = findUserByEmail(userEmail);
         if (newRole.equals("admin")) {
             user.setRole(Role.ADMIN);
         } else if (newRole.equals("writer")) {
