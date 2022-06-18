@@ -32,7 +32,7 @@ public class BookController {
      * 책 저장
      */
     @PostMapping("/new")
-    public ResponseEntity<?> saveContents2(@RequestPart(required = false) BookRequest book,
+    public ResponseEntity<?> saveBook(@RequestPart(required = false) BookRequest book,
                                            @RequestPart(required = false) MultipartFile book_cover)
             throws IOException {
         log.info("Book controller: api/book/new ---------------------");
@@ -40,8 +40,8 @@ public class BookController {
         Book newBook = bookService.saveBook(book);
 
         // 책 커버 저장
-        Bookcoverfile bookcoverfile = s3Uploader.uploadBookcoverfile(newBook.getId(), book_cover, "image");
+        Bookcoverfile bookcoverfile = s3Uploader.uploadBookCoverfile(newBook.getId(), book_cover, "image");
 
-        return ResponseEntity.ok(new BookDTO(newBook));
+        return ResponseEntity.ok(new BookDTO(newBook, bookcoverfile));
     }
 }

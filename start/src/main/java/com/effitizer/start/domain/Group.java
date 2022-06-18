@@ -19,6 +19,7 @@ public class Group extends BaseTimeEntity{
     @Column(name = "group_id")
     private Long id; //  id
 
+    @Column(name="title")
     private String title; // 주제
 
     @ManyToMany(mappedBy = "groups")

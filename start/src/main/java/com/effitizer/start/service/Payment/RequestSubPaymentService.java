@@ -47,6 +47,5 @@ public class RequestSubPaymentService {
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
 
         return restTemplate.postForObject("https://api.iamport.kr/subscribe/payments/again", entity, String.class);
-
     }
 }

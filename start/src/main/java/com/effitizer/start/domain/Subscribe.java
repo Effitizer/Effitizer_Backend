@@ -34,16 +34,19 @@ public class Subscribe{
 
     private LocalDateTime start_date; //구독시작일
     private LocalDateTime expired_date; //만료일
-    private LocalDateTime canceled_data; // 결제 중단일
 
-//    @Builder
-//    public Subscribe(User user, LocalDateTime start_date, LocalDateTime expired_date, LocalDateTime canceled_data) {
-//        this.start_date = start_date;
-//        this.expired_date = expired_date;
-//        this.canceled_data = canceled_data;
-//
-//        this.setUser(user);
-//    }
+    @Column(name = "canceled_data")
+    private LocalDateTime canceledData; // 결제 중단일
+
+    @Builder
+    public Subscribe(User user, LocalDateTime start_date, LocalDateTime expired_date, LocalDateTime canceled_data){
+        this.user=user;
+        this.start_date=start_date;
+        this.expired_date=expired_date;
+        this.canceledData=canceled_data;
+
+        this.setUser(user);
+    }
 
     //==연관관계 메서드==//
 
@@ -51,16 +54,10 @@ public class Subscribe{
         this.payments.add(payment);
         payment.setSubscribe(this);
     }
-//    public void setUser(User user) {
-//        this.user = user;
-//        user.getSubscribe().add(this);
-//    }
 
-    @Builder
-    public Subscribe(User user, LocalDateTime start_date, LocalDateTime expired_date, LocalDateTime canceled_data){
-        this.user=user;
-        this.start_date=start_date;
-        this.expired_date=expired_date;
-        this.canceled_data=canceled_data;
+    public void setUser(User user) {
+        this.user = user;
+        user.getSubscribes().add(this);
     }
+
 }

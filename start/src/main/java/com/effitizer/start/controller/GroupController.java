@@ -1,13 +1,17 @@
 package com.effitizer.start.controller;
 
+import com.effitizer.start.config.auth.dto.SessionUser;
 import com.effitizer.start.domain.Contents;
 import com.effitizer.start.domain.Group;
+import com.effitizer.start.domain.Role;
+import com.effitizer.start.domain.User;
 import com.effitizer.start.domain.dto.Group.AllGroupDTO;
 import com.effitizer.start.domain.dto.Group.Contents.GroupContentsDTO;
 import com.effitizer.start.domain.dto.Group.GroupDTO;
 import com.effitizer.start.domain.dto.Group.Request.GroupRequest;
 import com.effitizer.start.error.ErrorResponse;
 import com.effitizer.start.service.GroupService;
+import com.effitizer.start.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +31,10 @@ import java.util.List;
 @RequestMapping("api/group")
 public class GroupController {
     @Autowired GroupService groupService;
-
+    @Autowired
+    HttpSession httpSession;
+    @Autowired
+    UserService userService;
     /**
      * 그룹 저장
      * ADMIN 만 가능
@@ -35,6 +43,10 @@ public class GroupController {
     public ResponseEntity<?> saveGroup(@RequestBody GroupRequest groupRequest) {
         log.info("Group controller: /api/group/new ---------------------");
         try {
+            SessionUser user = (SessionUser) httpSession.getAttribute("user");
+            User user_info= userService.findUserByName(user.getName());
+            if(!user_info.getRole().equals(Role.ADMIN)) //only Admin can manage this function
+                return new ResponseEntity<>("Only admin can create category", HttpStatus.BAD_REQUEST);
             Group group = groupService.saveGroup(groupRequest);
             log.info("Group controller: /api/group/new ---------------------"+ group.toString());
             List<Contents> contentsList = group.getContents();
@@ -66,6 +78,7 @@ public class GroupController {
         try {
             log.info("Group controller: /api/group ---------------------");
             List<Group> groupList = groupService.findAllGroupList();
+            System.out.println("sizes:"+ groupList.size());
             List<AllGroupDTO> allGroupDTOList = new ArrayList<>();
             for (int i = 0; i < groupList.size(); i++) {
                 Group group = groupList.get(i);

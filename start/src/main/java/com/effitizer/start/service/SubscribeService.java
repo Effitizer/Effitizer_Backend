@@ -24,25 +24,27 @@ import java.time.LocalDateTime;
 @Service
 @Transactional
 public class SubscribeService {
+    @Autowired SubscribeRepository subscribeRepository;
+    @Autowired UserService userService;
 
-    @Autowired
-    SubscribeRepository subscribeRepository;
-
+    //user 아이디로 구독 정보 기록 조회
     public List<Subscribe> findSubscribesByUserId(Long user_id) {
         return subscribeRepository.findByUserId(user_id);
     }
 
+    //user 아이디로 구독 정보 조회
     public Subscribe findSubscribeByUserId(Long user_id) {
         return subscribeRepository.findFirstByUserIdOrderByIdDesc(user_id)
                 .orElse(null);
     }
+    //user 구독 추가
     public void saveOne(User user) {
 
         LocalDateTime current = LocalDateTime.now();
         Subscribe subscribe =new Subscribe(user,current,current.plusMonths(1),current.plusMonths(1));
         subscribeRepository.save(subscribe);
     }
-
+    //user 구독 연장
     public void updateOne(User user, LocalDateTime expired_date) {
 
         LocalDateTime current = LocalDateTime.now();
@@ -74,11 +76,21 @@ public class SubscribeService {
     }
 
     /**
+     * Subscribe 구독 갱신 시 데이터 업데이트
+     */
+    public Subscribe updateSubscribe(String userEmail){
+        User user = userService.findUserByEmail(userEmail);
+        Subscribe subscribe = subscribeRepository.findByUserOrderByCanceledDataDesc(user).get(0);
+        subscribe.setExpired_date(subscribe.getExpired_date().plusDays(30));
+        return subscribe;
+    }
+
+    /**
      * Subscribe 구독 중단시키기
      */
     public Subscribe updateExpire(Long subscribe_id){
         Subscribe subscribe = findSubscribeById(subscribe_id);
-        subscribe.setCanceled_data(LocalDateTime.now());
+        subscribe.setCanceledData(LocalDateTime.now());
         return subscribe;
     }
 
