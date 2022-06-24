@@ -23,23 +23,23 @@ public class GroupService {
     /**
      * 그룹 저장
      */
-    public Group saveGroup(GroupRequest groupRequest) {
-        List<Contents> contentsList = new ArrayList<>();
-        List<GroupContentsRequest> groupContentsRequestList = groupRequest.getContents();
-        // contents 찾기
-        for(int i=0; i<groupContentsRequestList.size(); i++) {
-            GroupContentsRequest groupContentsRequest = groupContentsRequestList.get(i);
-            Contents contents = contentsService.findContensById(groupContentsRequest.getId());
-
-            if(!contents.getTitle().equals(groupContentsRequest.getTitle())) { // title이 동일하지 않을 때
-                log.info("GroupService: 데이터 정보 오류");
-                throw new IllegalStateException("데이터 정보가 올바르지 않습니다.");
-            }
-            contentsList.add(contents);
-        }
-        Group group = new Group(groupRequest.getTitle(), contentsList);
-        return groupRepository.save(group);
-    }
+//    public Group saveGroup(GroupRequest groupRequest) {
+//        List<Contents> contentsList = new ArrayList<>();
+//        List<GroupContentsRequest> groupContentsRequestList = groupRequest.getContents();
+//        // contents 찾기
+//        for(int i=0; i<groupContentsRequestList.size(); i++) {
+//            GroupContentsRequest groupContentsRequest = groupContentsRequestList.get(i);
+//            Contents contents = contentsService.findContensById(groupContentsRequest.getId());
+//
+//            if(!contents.getTitle().equals(groupContentsRequest.getTitle())) { // title이 동일하지 않을 때
+//                log.info("GroupService: 데이터 정보 오류");
+//                throw new IllegalStateException("데이터 정보가 올바르지 않습니다.");
+//            }
+//            contentsList.add(contents);
+//        }
+//        Group group = new Group(groupRequest.getTitle(), contentsList);
+//        return groupRepository.save(group);
+//    }
 
     /**
      * 그룹 전체 조회
