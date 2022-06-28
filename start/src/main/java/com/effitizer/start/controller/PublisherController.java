@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 
 @Slf4j
 @Controller
-@RequestMapping("test/api/publisher")
+@RequestMapping("/api/publisher")
 public class PublisherController {
     @Autowired PublisherService publisherService;
 

@@ -4,12 +4,14 @@ import com.effitizer.start.domain.Role;
 import com.effitizer.start.domain.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
 @Slf4j
 @Getter
+@NoArgsConstructor
 public class OAuthAttributes {
     private Map<String, Object> attributes; // OAuth2 반환하는 유저 정보 Map
     private String nameAttributeKey;
