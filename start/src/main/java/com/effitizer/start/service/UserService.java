@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class UserService {
@@ -29,6 +31,10 @@ public class UserService {
                 .orElse(null);
     }
 
+    public List<User> findAll(){
+        return userRepository.findAll();
+    }
+
     /**
      * 사용자의 ROLE를 변경
      * @param newRole 변경될 ROLE
@@ -41,5 +47,10 @@ public class UserService {
             user.setRole(Role.WRITER);
         }
        return user;
+    }
+
+    public void deleteUser(String email){
+        User user = findUserByEmail(email);
+        userRepository.delete(user);
     }
 }

@@ -3,6 +3,8 @@ package com.effitizer.start.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.bytebuddy.implementation.bind.annotation.Default;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,6 +24,9 @@ public class Publisher extends BaseTimeEntity{
 
     @OneToMany(mappedBy = "publisher")
     private List<Book> books = new ArrayList<>();
+
+    @ColumnDefault("0")
+    private boolean isDeleted;
 
     public Publisher (String name) {
         this.name = name;
