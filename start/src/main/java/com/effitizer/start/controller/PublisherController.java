@@ -47,7 +47,7 @@ public class PublisherController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> savePublisher() {
+    public ResponseEntity<?> viewAllPublisher() {
         try {
             log.info("Publisher controller: /api/publisher---------------------");
             List<PublisherDTO> publisherDTOList= publisherService.findAll()
@@ -90,8 +90,17 @@ public class PublisherController {
     }
 
 
-//    @PatchMapping("/{publisher_id}")
-//    public ReponseEntity<?> delete
+    @PatchMapping("/{publisher_id}")
+    public ResponseEntity<?> deletePublisher(@PathVariable ("publisher_id")Long publisher_id){
+
+        try{
+            Long id = publisherService.deletePublisher(publisher_id);
+            return new ResponseEntity<>(id+" is successfully deleted", HttpStatus.OK);
+        }catch(Exception e){
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 

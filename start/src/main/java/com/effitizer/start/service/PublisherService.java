@@ -28,8 +28,10 @@ public class PublisherService {
      * id로 출판자 조회
      */
     public Publisher findPublisherById(Long publisherId) {
-        return publisherRepository.findById(publisherId)
-                .orElseThrow(() -> new IllegalStateException("출판사 정보가 올바르지 않습니다."));
+        Optional<Publisher> publisher= publisherRepository.findById(publisherId);
+        if(publisher.isEmpty() || publisher.get().isDeleted())
+            throw new IllegalStateException("존재하지 않는 데이터 입니다.");
+        return publisher.get();
     }
 
     /**
@@ -72,8 +74,15 @@ public class PublisherService {
     }
 
     public List<Publisher> findAll(){
-        return publisherRepository.findAll();
+        return publisherRepository.findByIsDeletedFalse();
     }
 
+    public Long deletePublisher(Long id) {
+
+        Publisher publisher= publisherRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("출판사 정보가 올바르지 않습니다."));
+        publisher.setDeleted(true);
+        return id;
+    }
 
 }
