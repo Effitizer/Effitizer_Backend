@@ -2,6 +2,8 @@ package com.effitizer.start.service;
 
 import com.effitizer.start.domain.Contents;
 import com.effitizer.start.domain.Group;
+import com.effitizer.start.domain.Publisher;
+import com.effitizer.start.domain.dto.Group.GroupDTO;
 import com.effitizer.start.domain.dto.Group.Request.GroupContentsRequest;
 import com.effitizer.start.domain.dto.Group.Request.GroupRequest;
 import com.effitizer.start.repository.GroupRepository;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -46,5 +49,26 @@ public class GroupService {
      */
     public List<Group> findAllGroupList() {
         return groupRepository.findAll();
+    }
+
+    public Group saveGroup(GroupDTO groupDTO) {
+        Group group = new Group(groupDTO.getTitle());
+        return groupRepository.save(group);
+    }
+
+
+    public Group editGroup(GroupDTO groupDTO) {
+        Group group = groupRepository.findById(groupDTO.getId())
+                .orElseThrow(() -> new IllegalStateException("그룹 정보가 올바르지 않습니다"));
+        group.setTitle(groupDTO.getTitle());
+
+        return group;
+    }
+
+    public Long deleteGroup(long group_id){
+        Group group = groupRepository.findById(group_id)
+                .orElseThrow(() -> new IllegalStateException("그룹 정보가 올바르지 않습니다"));
+        groupRepository.delete(group);
+        return group_id;
     }
 }

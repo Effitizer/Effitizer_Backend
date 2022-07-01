@@ -5,6 +5,7 @@ import com.effitizer.start.domain.Contents;
 import com.effitizer.start.domain.Group;
 import com.effitizer.start.domain.Role;
 import com.effitizer.start.domain.User;
+import com.effitizer.start.domain.dto.Category.CategoryDTO;
 import com.effitizer.start.domain.dto.Group.AllGroupDTO;
 import com.effitizer.start.domain.dto.Group.Contents.GroupContentsDTO;
 import com.effitizer.start.domain.dto.Group.GroupDTO;
@@ -17,14 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -47,6 +46,7 @@ public class GroupController {
 //            User user_info= userService.findUserByName(user.getName());
 //            if(!user_info.getRole().equals(Role.ADMIN)) //only Admin can manage this function
 //                return new ResponseEntity<>("Only admin can create category", HttpStatus.BAD_REQUEST);
+//
 //            Group group = groupService.saveGroup(groupRequest);
 //            log.info("Group controller: /api/group/new ---------------------"+ group.toString());
 //            List<Contents> contentsList = group.getContents();
@@ -57,7 +57,7 @@ public class GroupController {
 //                groupContentsDTOList.add(new GroupContentsDTO(contents));
 //                log.info("Group controller: /api/group/new ---------------------"+ groupContentsDTOList.size());
 //            }
-//            return ResponseEntity.ok(new GroupDTO(group, groupContentsDTOList));
+//           // return ResponseEntity.ok(new GroupDTO(group, groupContentsDTOList));
 //        }
 //        catch (IllegalStateException e) {
 //            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
@@ -69,7 +69,7 @@ public class GroupController {
 //        }
 //
 //    }
-//
+
     /**
      * 전체 그룹 검색
      */
@@ -101,4 +101,90 @@ public class GroupController {
 //            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 //        }
 //    }
+
+    @PostMapping("/new")
+    public ResponseEntity<?> saveGroup(@RequestBody GroupDTO groupDTO) {
+
+        log.info("Group controller: /api/group/new ---------------------");
+        try {
+            SessionUser user = (SessionUser) httpSession.getAttribute("user");
+            User user_info = userService.findUserByName(user.getName());
+            if (!user_info.getRole().equals(Role.ADMIN)) //only Admin can manage this function
+                return new ResponseEntity<>("Only admin can create category", HttpStatus.BAD_REQUEST);
+
+            Group group = groupService.saveGroup(groupDTO);
+            //     log.info("Group controller: /api/group/new ---------------------"+ group.toString());
+
+            return new ResponseEntity<>(new GroupDTO(group), HttpStatus.OK);
+        }
+        catch (IllegalStateException e) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        }
+        catch (Exception e){
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("")
+    public ResponseEntity<?> sendAllGroupList() {
+        try {
+            log.info("Group controller: /api/group ---------------------");
+            List<GroupDTO> groupDTOList= groupService.findAllGroupList()
+                    .stream()
+                    .filter(group->group!=null)
+                    .map(GroupDTO::new)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(groupDTOList);
+        }
+        catch (Exception e){
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<?> editGroup(@RequestBody GroupDTO groupDTO) {
+        try {
+            SessionUser user = (SessionUser) httpSession.getAttribute("user");
+            User user_info = userService.findUserByName(user.getName());
+            if (!user_info.getRole().equals(Role.ADMIN)) //only Admin can manage this function
+                return new ResponseEntity<>("Only admin can create category", HttpStatus.BAD_REQUEST);
+
+            Group group = groupService.editGroup(groupDTO);
+            return new ResponseEntity<>(new GroupDTO(group), HttpStatus.OK);
+        }
+        catch (IllegalStateException e) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        }
+        catch (Exception e){
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/delete/{group_id}")
+    public ResponseEntity<?> deleteGroup(@PathVariable("group_id") long group_id) {
+        try {
+            SessionUser user = (SessionUser) httpSession.getAttribute("user");
+            User user_info = userService.findUserByName(user.getName());
+            if (!user_info.getRole().equals(Role.ADMIN)) //only Admin can manage this function
+                return new ResponseEntity<>("Only admin can create category", HttpStatus.BAD_REQUEST);
+
+            Long id = groupService.deleteGroup(group_id);
+            return new ResponseEntity<>(id+"is deleted ", HttpStatus.OK);
+        }
+        catch (IllegalStateException e) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        }
+        catch (Exception e){
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
 }
