@@ -30,7 +30,7 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping("/test/api/payment")
+@RequestMapping("api/payment")
 public class PaymentController {
     @Autowired HttpSession httpSession;
     @Autowired ReqPaymentScheduler scheduler;

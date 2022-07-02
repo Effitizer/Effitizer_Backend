@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
-@RequestMapping("/test/api/subscribe")
+@RequestMapping("/api/subscribe")
 public class SubscribeController {
     @Autowired
     SubscribeService subscribeService;
