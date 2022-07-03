@@ -13,6 +13,9 @@ import com.effitizer.start.domain.Contents;
 import com.effitizer.start.domain.Contentsfile;
 import com.effitizer.start.repository.BookRepository;
 import com.effitizer.start.repository.ContentsRepository;
+import com.effitizer.start.service.BookService;
+import com.effitizer.start.service.BookcoverfileService;
+import com.effitizer.start.service.ContentsfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,9 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class S3Uploader {
     @Autowired AmazonS3Client amazonS3Client;
-    @Autowired ContentsRepository contentsRepository;
+    @Autowired BookRepository bookRepository;
+    @Autowired BookcoverfileService bookcoverfileService;
     @Autowired
-    BookRepository bookRepository;
+    ContentsfileService contentsfileService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -46,29 +50,24 @@ public class S3Uploader {
         String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
-        return new Contentsfile(contents, origin_filename, fileName, size, uploadImageUrl, extend);
+        return contentsfileService.saveContentsfile(contents, fileName, uploadImageUrl, size, extend, origin_filename);
     }
 
-    public Bookcoverfile uploadBookcoverfile(Long bookId, MultipartFile multipartFile, String dirName) throws IOException {
+    public Bookcoverfile uploadBookCoverfile(Long bookId, MultipartFile multipartFile, String dirName) throws IOException {
         log.info("파일 확인"+ multipartFile.toString());
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-        return uploadBookcoverfile(bookId, uploadFile, dirName, multipartFile.getSize(), multipartFile.getContentType(), multipartFile.getOriginalFilename());
+        return uploadBookCoverfile(bookId, uploadFile, dirName, multipartFile.getSize(), multipartFile.getContentType(), multipartFile.getOriginalFilename());
     }
 
-    private Bookcoverfile uploadBookcoverfile(Long bookId, File uploadFile, String dirName, Long size, String extend, String origin_filename) {
+    private Bookcoverfile uploadBookCoverfile(Long bookId, File uploadFile, String dirName, Long size, String extend, String origin_filename) {
         String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
+
+        // Bookcoverfile 저장
         Book book = bookRepository.getById(bookId);
-        return Bookcoverfile.builder()
-                            .book(book)
-                            .extend(extend)
-                            .name(fileName)
-                            .size(size)
-                            .path(uploadImageUrl)
-                            .real_name(origin_filename)
-                            .build();
+        return bookcoverfileService.saveBookCoverfile(book, fileName, uploadImageUrl, size, extend, origin_filename);
     }
 
     private String putS3(File uploadFile, String fileName) {

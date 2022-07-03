@@ -39,66 +39,66 @@ public class GroupController {
      * 그룹 저장
      * ADMIN 만 가능
      */
-    @PostMapping("/new")
-    public ResponseEntity<?> saveGroup(@RequestBody GroupRequest groupRequest) {
-        log.info("Group controller: /api/group/new ---------------------");
-        try {
-            SessionUser user = (SessionUser) httpSession.getAttribute("user");
-            User user_info= userService.findUserByName(user.getName());
-            if(!user_info.getRole().equals(Role.ADMIN)) //only Admin can manage this function
-                return new ResponseEntity<>("Only admin can create category", HttpStatus.BAD_REQUEST);
-            Group group = groupService.saveGroup(groupRequest);
-            log.info("Group controller: /api/group/new ---------------------"+ group.toString());
-            List<Contents> contentsList = group.getContents();
-            List<GroupContentsDTO> groupContentsDTOList = new ArrayList<>();
-            for(int i=0; i<contentsList.size(); i++) {
-                Contents contents = contentsList.get(i);
-                //Content 설정
-                groupContentsDTOList.add(new GroupContentsDTO(contents));
-                log.info("Group controller: /api/group/new ---------------------"+ groupContentsDTOList.size());
-            }
-            return ResponseEntity.ok(new GroupDTO(group, groupContentsDTOList));
-        }
-        catch (IllegalStateException e) {
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
-            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
-        }
-        catch (Exception e){
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }
-
-    }
-
+//    @PostMapping("/new")
+//    public ResponseEntity<?> saveGroup(@RequestBody GroupRequest groupRequest) {
+//        log.info("Group controller: /api/group/new ---------------------");
+//        try {
+//            SessionUser user = (SessionUser) httpSession.getAttribute("user");
+//            User user_info= userService.findUserByName(user.getName());
+//            if(!user_info.getRole().equals(Role.ADMIN)) //only Admin can manage this function
+//                return new ResponseEntity<>("Only admin can create category", HttpStatus.BAD_REQUEST);
+//            Group group = groupService.saveGroup(groupRequest);
+//            log.info("Group controller: /api/group/new ---------------------"+ group.toString());
+//            List<Contents> contentsList = group.getContents();
+//            List<GroupContentsDTO> groupContentsDTOList = new ArrayList<>();
+//            for(int i=0; i<contentsList.size(); i++) {
+//                Contents contents = contentsList.get(i);
+//                //Content 설정
+//                groupContentsDTOList.add(new GroupContentsDTO(contents));
+//                log.info("Group controller: /api/group/new ---------------------"+ groupContentsDTOList.size());
+//            }
+//            return ResponseEntity.ok(new GroupDTO(group, groupContentsDTOList));
+//        }
+//        catch (IllegalStateException e) {
+//            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
+//            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+//        }
+//        catch (Exception e){
+//            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+//            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//        }
+//
+//    }
+//
     /**
      * 전체 그룹 검색
      */
-    @GetMapping("")
-    public ResponseEntity<?> sendAllGroupList() {
-        try {
-            log.info("Group controller: /api/group ---------------------");
-            List<Group> groupList = groupService.findAllGroupList();
-            System.out.println("sizes:"+ groupList.size());
-            List<AllGroupDTO> allGroupDTOList = new ArrayList<>();
-            for (int i = 0; i < groupList.size(); i++) {
-                Group group = groupList.get(i);
-                List<Contents> contentsList = group.getContents();
-                List<GroupContentsDTO> groupContentsDTOList = new ArrayList<>();
-                for (int j = 0; j < contentsList.size(); j++) {
-                    //Content 설정
-                    Contents contents = contentsList.get(j);
-                    GroupContentsDTO groupContentsDTO = new GroupContentsDTO(contents);
-                    groupContentsDTOList.add(groupContentsDTO);
-                }
-                // Group 설정
-                AllGroupDTO allGroupDTO = new AllGroupDTO(group, groupContentsDTOList);
-                allGroupDTOList.add(allGroupDTO);
-            }
-            return ResponseEntity.ok(allGroupDTOList);
-        }
-        catch (Exception e){
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @GetMapping("")
+//    public ResponseEntity<?> sendAllGroupList() {
+//        try {
+//            log.info("Group controller: /api/group ---------------------");
+//            List<Group> groupList = groupService.findAllGroupList();
+//            System.out.println("sizes:"+ groupList.size());
+//            List<AllGroupDTO> allGroupDTOList = new ArrayList<>();
+//            for (int i = 0; i < groupList.size(); i++) {
+//                Group group = groupList.get(i);
+//                List<Contents> contentsList = group.getContents();
+//                List<GroupContentsDTO> groupContentsDTOList = new ArrayList<>();
+//                for (int j = 0; j < contentsList.size(); j++) {
+//                    //Content 설정
+//                    Contents contents = contentsList.get(j);
+//                    GroupContentsDTO groupContentsDTO = new GroupContentsDTO(contents);
+//                    groupContentsDTOList.add(groupContentsDTO);
+//                }
+//                // Group 설정
+//                AllGroupDTO allGroupDTO = new AllGroupDTO(group, groupContentsDTOList);
+//                allGroupDTOList.add(allGroupDTO);
+//            }
+//            return ResponseEntity.ok(allGroupDTOList);
+//        }
+//        catch (Exception e){
+//            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+//            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 }

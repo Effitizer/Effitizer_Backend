@@ -24,4 +24,5 @@ public class PaymentRequest {
     private String customer_uid;
     private String  pg_provider;
     private Date pay_date;
+    private String merchant_uid;
 }

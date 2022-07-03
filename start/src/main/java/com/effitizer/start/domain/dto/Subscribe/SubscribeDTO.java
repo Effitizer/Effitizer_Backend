@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class SubscribeDTO {
     private Long id; //  id
-
-    private Long user_id; // 회원 id
+    private Long user_id;
 
     private LocalDateTime start_date; //구독시작일
     private LocalDateTime expired_date; //만료일
@@ -30,6 +29,6 @@ public class SubscribeDTO {
         this.user_id=subscribe.getUser().getId();
         this.start_date=subscribe.getStart_date();
         this.expired_date=subscribe.getExpired_date();
-        this.canceled_data=subscribe.getCanceled_data();
+        this.canceled_data=subscribe.getCanceledData();
     }
 }

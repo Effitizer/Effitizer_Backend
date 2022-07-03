@@ -7,6 +7,8 @@ import com.effitizer.start.repository.ContentsRepository;
 import com.effitizer.start.repository.ContentsfileRepository;
 import com.effitizer.start.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +60,10 @@ public class ContentsService {
     public Contents findContensById(Long contents_id) {
         return contentsRepository.findById(contents_id)
                 .orElse(null);
+    }
+
+    public Page<Contents> findContents(Pageable pageable){
+        return contentsRepository.findAll(pageable);
     }
 
     /**

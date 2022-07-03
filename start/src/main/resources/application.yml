@@ -8,7 +8,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     show-sql: 'true'
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   profiles:
     include:
       - oauth
@@ -21,6 +21,10 @@ spring:
       max-request-size: 20MB
 logging:
   level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
     org:
       hibernate:
         type:
