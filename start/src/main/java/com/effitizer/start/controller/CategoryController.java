@@ -87,7 +87,7 @@ public class CategoryController {
     /**
      * 카테고리 수정
      */
-    @PostMapping("/{category_id}/edit")
+    @PutMapping("/{category_id}/edit")
     public ResponseEntity<?> editCategory(@PathVariable("category_id") Long category_id,
                                           @RequestBody CategoryRequest categoryRequest) {
         Category category = categoryService.editCategory(category_id, categoryRequest.getName());
@@ -97,7 +97,7 @@ public class CategoryController {
     /**
      * 카테고리 삭제
      */
-    @GetMapping("/{category_id}/delete")
+    @PatchMapping("/{category_id}/delete")
     public ResponseEntity<?> deleteCategory(@PathVariable("category_id") Long category_id) {
         categoryService.deleteCategory(category_id);
         return new ResponseEntity<>(HttpStatus.OK);

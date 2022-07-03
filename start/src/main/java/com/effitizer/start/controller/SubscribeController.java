@@ -3,9 +3,6 @@ package com.effitizer.start.controller;
 import com.effitizer.start.component.ReqPaymentScheduler;
 import com.effitizer.start.config.auth.dto.SessionUser;
 import com.effitizer.start.domain.*;
-import com.effitizer.start.domain.dto.Category.CategoryDTO;
-import com.effitizer.start.domain.dto.Category.Request.CategoryRequest;
-import com.effitizer.start.domain.dto.Contents.ContentsDTO;
 import com.effitizer.start.domain.dto.Subscribe.Request.SubscribeRequest;
 import com.effitizer.start.domain.dto.Subscribe.SubscribeDTO;
 import com.effitizer.start.error.ErrorResponse;
@@ -107,7 +104,7 @@ public class SubscribeController {
     }
     @PutMapping("/subscription/renew")
     public ResponseEntity<?> saveSubscription(){
-        try {ResponseEntity<?>
+        try {
             SessionUser user = (SessionUser) httpSession.getAttribute("user");
             User user_info= userService.findUserByName(user.getName());
             Subscribe subscribe = subscribeService.findSubscribeByUserId(user_info.getId());
@@ -136,7 +133,7 @@ public class SubscribeController {
     /**
      * Subscribe 구독 수정
      */
-    @PostMapping("/{subscribe_id}/edit")
+    @PutMapping("/{subscribe_id}")
     public ResponseEntity<?> editSubscribe(@PathVariable("subscribe_id") Long subscribe_id,
                                            @RequestBody SubscribeRequest subscribeRequest) {
         Subscribe subscribe = subscribeService.editSubscribe(subscribe_id, subscribeRequest);
@@ -146,8 +143,8 @@ public class SubscribeController {
     /**
      * Subscribe 구독 삭제
      */
-    @GetMapping("/{subscribe_id}/delete")
-    public ResponseEntity<?>deleteSubscribe(Long subscribe_id){
+    @PatchMapping("/{subscribe_id}")
+    public ResponseEntity<?> deleteSubscribe(Long subscribe_id){
         subscribeService.deleteSubscribe(subscribe_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
