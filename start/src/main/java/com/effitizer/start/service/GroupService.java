@@ -21,7 +21,6 @@ import java.util.Optional;
 @Transactional
 public class GroupService {
     @Autowired GroupRepository groupRepository;
-    @Autowired ContentsService contentsService;
 
     /**
      * 그룹 저장
@@ -54,6 +53,12 @@ public class GroupService {
     public Group saveGroup(GroupDTO groupDTO) {
         Group group = new Group(groupDTO.getTitle());
         return groupRepository.save(group);
+    }
+
+    public Group findGroupById(Long groupId){
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalStateException("그룹 정보가 올바르지 않습니다"));
+        return group;
     }
 
 
