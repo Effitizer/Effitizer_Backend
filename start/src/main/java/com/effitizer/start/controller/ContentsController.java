@@ -1,5 +1,6 @@
 package com.effitizer.start.controller;
 
+import com.amazonaws.Response;
 import com.effitizer.start.aws.S3Uploader;
 import com.effitizer.start.config.auth.dto.SessionUser;
 import com.effitizer.start.domain.*;
@@ -40,25 +41,29 @@ public class ContentsController {
      * ADMIN만 가능
      */
     @PostMapping("/new")
-    public ResponseEntity<?> saveContents(@RequestPart(required = false) ContentsRequest contents,
+    public ResponseEntity<?> saveContents(@RequestBody(required = false) ContentsRequest contents,
                                           @RequestPart(required = false) List<MultipartFile> contents_images)
             throws IOException {
         log.info("Contents controller: api/contents/new ---------------------");
         // Session
-        //SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-        //Long userId= userService.findUserByName(sessionUser.getName()).getId();
+        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+        Long userId= userService.findUserByName(sessionUser.getName()).getId();
 
-        // Contents 저장
-        Contents newContent = contentsService.saveContents(contents);
-        // Contents file 저장
-        List<ContentsContentsfileDTO> contentsContentsfileDTOS = new ArrayList<>();
-        for (MultipartFile multipartFile: contents_images) {
-            Contentsfile contentsfile = s3Uploader.upload(newContent, multipartFile, "image");
-            ContentsContentsfileDTO contentsContentsfileDTO = new ContentsContentsfileDTO(contentsfile.getId(), contentsfile.getSize(), contentsfile.getExtend(), contentsfile.getPath());
-            contentsContentsfileDTOS.add(contentsContentsfileDTO);
+        if(!sessionUser.getRole().equals(Role.ADMIN))
+            return new ResponseEntity<>("Only admin can create contents", HttpStatus.BAD_REQUEST);
+        else{
+            // Contents 저장
+            Contents newContent = contentsService.saveContents(contents);
+            // System.out.println(newContent.getContent());
+            // Contents file 저장
+            List<ContentsContentsfileDTO> contentsContentsfileDTOS = new ArrayList<>();
+            for (MultipartFile multipartFile: contents_images) {
+                Contentsfile contentsfile = s3Uploader.upload(newContent, multipartFile, "image");
+                ContentsContentsfileDTO contentsContentsfileDTO = new ContentsContentsfileDTO(contentsfile.getId(), contentsfile.getSize(), contentsfile.getExtend(), contentsfile.getPath());
+                contentsContentsfileDTOS.add(contentsContentsfileDTO);
+            }
+            return ResponseEntity.ok(new ContentsDTO(newContent, contentsContentsfileDTOS));
         }
-
-        return ResponseEntity.ok(new ContentsDTO(newContent, contentsContentsfileDTOS));
     }
 
 
@@ -69,7 +74,7 @@ public class ContentsController {
     public ResponseEntity<?> selectContent(@PathVariable("contents_id") Long contents_id) {
         try {
             log.info("Contents controller: api/contents/{contents_id}---------------------");
-            Contents contents = contentsService.findContensById(contents_id);
+            Contents contents = contentsService.findContentsById(contents_id);
             return ResponseEntity.ok(new ContentsDTO(contents));
         }
         catch (Exception e){
@@ -100,12 +105,38 @@ public class ContentsController {
     public ResponseEntity<?> editOneContents(@PathVariable("contents_id") Long contents_id, @RequestBody OnlyContentsRequest onlyContentsRequest) {
         try {
             log.info("Contents controller: api/contents/{contents_id}/edit -----------------------------------");
+            SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+            Long userId= userService.findUserByName(sessionUser.getName()).getId();
 
-
-            Contents contents = contentsService.update(onlyContentsRequest);
-            return ResponseEntity.ok(new ContentsDTO(contents));
+            if(sessionUser.getRole().equals(Role.USER))
+                return new ResponseEntity<>("User cannot edit contents", HttpStatus.BAD_REQUEST);
+            else {
+                Contents contents = contentsService.update(onlyContentsRequest);
+                return ResponseEntity.ok(new ContentsDTO(contents));
+            }
         }
         catch (Exception e){
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    //콘텐츠 삭제
+    @PatchMapping("/{contents_id}/delete")
+    public ResponseEntity<?> deleteContents(@PathVariable("contents_id")Long contents_id){
+        try{
+            SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+            Long userId= userService.findUserByName(sessionUser.getName()).getId();
+
+            if(!sessionUser.getRole().equals(Role.ADMIN))
+                return new ResponseEntity<>("Only admin can delete contents", HttpStatus.BAD_REQUEST);
+            else{
+                Contents contents= contentsService.deleteContents(contents_id);
+                return ResponseEntity.ok(new ContentsDTO(contents));
+            }
+        }
+        catch(Exception e){
             ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }

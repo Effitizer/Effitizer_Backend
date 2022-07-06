@@ -1,15 +1,19 @@
 package com.effitizer.start.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
-@Table(name = "contents_groups")
+
 public class ContentsGroups {
 
     @Id
@@ -25,4 +29,10 @@ public class ContentsGroups {
     @JoinColumn(name = "contents_id")
     private Contents contents;
 
+
+    @Builder
+    public ContentsGroups(Contents contents, Group group){
+        this.contents= contents;
+        this.group= group;
+    }
 }

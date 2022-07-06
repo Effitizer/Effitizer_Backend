@@ -1,6 +1,7 @@
 package com.effitizer.start.domain;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -35,8 +36,13 @@ public class Contents extends BaseTimeEntity{
 
     public String title; // 제목
     public String content; // 내용
+
+    @ColumnDefault("0")
     private Long view; // 조회수
     private String isbn; // 국제표준도서번호
+
+    @ColumnDefault("0")
+    private boolean isDeleted;//삭제여부
 
     @OneToMany(mappedBy = "contents", cascade = CascadeType.ALL)
     private List<Contentsfile> contentsfiles = new ArrayList<>();

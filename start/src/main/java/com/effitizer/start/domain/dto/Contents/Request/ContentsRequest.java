@@ -10,8 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class ContentsRequest {
     private String isbn;
-    private Long user_id;
+    private Long userId;
     private String title;
     private String content;
-    private int book_order;
+    private int bookOrder;
+    private Long groupId;
 }

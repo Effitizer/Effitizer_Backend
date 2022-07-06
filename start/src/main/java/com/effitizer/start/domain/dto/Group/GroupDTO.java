@@ -4,6 +4,7 @@ import com.effitizer.start.domain.Group;
 import com.effitizer.start.domain.dto.Group.Contents.GroupContentsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -11,15 +12,22 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class GroupDTO {
     private Long id;
     private String title;
-    private List<GroupContentsDTO> contents;
+  //  private List<GroupContentsDTO> contents;
 
-    public GroupDTO(Group group, List<GroupContentsDTO> contents) {
-        this.id = group.getId();
-        this.title = group.getTitle();
-        this.contents = contents;
+//    public GroupDTO(Group group, List<GroupContentsDTO> contents) {
+//        this.id = group.getId();
+//        this.title = group.getTitle();
+//        this.contents = contents;
+//    }
+
+    public GroupDTO(Group group){
+        this.id=group.getId();
+        this.title= group.getTitle();
     }
+
 
 }

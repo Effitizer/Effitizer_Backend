@@ -1,5 +1,6 @@
 package com.effitizer.start.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,11 @@ public class Group extends BaseTimeEntity{
     public List<ContentsGroups> contents_groups = new ArrayList<>(); //책 id
 
 
+
+    @Builder
+    public Group(String title){
+        this.title=title;
+    }
 //    public Group(String title, List<Contents> contents) {
 //        this.title = title;
 //     //   this.contents = contents;
