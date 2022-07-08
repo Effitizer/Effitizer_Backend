@@ -1,5 +1,6 @@
 package com.effitizer.start.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "groups")
+@Table(name = "GroupList")
 public class Group extends BaseTimeEntity{
     @Id
     @GeneratedValue
@@ -22,20 +23,26 @@ public class Group extends BaseTimeEntity{
     @Column(name="title")
     private String title; // 주제
 
-    @ManyToMany(mappedBy = "groups")
-    private List<Contents> contents = new ArrayList<>();
+    @OneToMany(mappedBy = "group")
+    public List<ContentsGroups> contents_groups = new ArrayList<>(); //책 id
 
-    public Group(String title, List<Contents> contents) {
-        this.title = title;
-        this.contents = contents;
-        this.setContents(contents);
-    }
 
-    //==연관관계 메서드==//
-    public void setContents(List<Contents> contentsList) {
-        for (int i=0; i<contentsList.size(); i++) {
-            Contents contents = contentsList.get(i);
-            contents.getGroups().add(this);
-        }
+
+    @Builder
+    public Group(String title){
+        this.title=title;
     }
+//    public Group(String title, List<Contents> contents) {
+//        this.title = title;
+//     //   this.contents = contents;
+//        this.setContents(contents);
+//    }
+
+//    //==연관관계 메서드==//
+//    public void setContents(List<Contents> contentsList) {
+//        for (int i=0; i<contentsList.size(); i++) {
+//            Contents contents = contentsList.get(i);
+//            contents.getGroups().add(this);
+//        }
+//    }
 }
