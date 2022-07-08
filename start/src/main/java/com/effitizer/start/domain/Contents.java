@@ -41,6 +41,9 @@ public class Contents extends BaseTimeEntity{
     @OneToMany(mappedBy = "contents", cascade = CascadeType.ALL)
     private List<Contentsfile> contentsfiles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "contents")
+    private List<View> views = new ArrayList<>();
+
     @Builder
     public Contents(User user, Book book, String title, String content) {
         this.title = title;
