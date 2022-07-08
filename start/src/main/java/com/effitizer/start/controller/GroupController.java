@@ -102,6 +102,9 @@ public class GroupController {
 //        }
 //    }
 
+    /**
+     * 그룹 생성
+     */
     @PostMapping("/new")
     public ResponseEntity<?> saveGroup(@RequestBody GroupDTO groupDTO) {
 
@@ -126,6 +129,10 @@ public class GroupController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
+
+    /**
+     * 전체 그룹 검색
+     */
     @GetMapping("")
     public ResponseEntity<?> sendAllGroupList() {
         try {
@@ -143,6 +150,25 @@ public class GroupController {
         }
     }
 
+    /**
+     * 그룹 하나 검색
+     */
+    @GetMapping("/{group_id}")
+    public ResponseEntity<?> sendGroup(@PathVariable("group_id") long group_id) {
+        try {
+            log.info("Group controller: /api/group/{group_id} ---------------------");
+            Group group = groupService.findGroupById(group_id);
+            return ResponseEntity.ok(new GroupDTO(group));
+        }
+        catch (Exception e){
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * 그룹 수정
+     */
     @PutMapping("/edit")
     public ResponseEntity<?> editGroup(@RequestBody GroupDTO groupDTO) {
         try {
@@ -164,6 +190,9 @@ public class GroupController {
         }
     }
 
+    /**
+     * 그룹 삭제
+     */
     @DeleteMapping("/delete/{group_id}")
     public ResponseEntity<?> deleteGroup(@PathVariable("group_id") long group_id) {
         try {
