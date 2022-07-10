@@ -36,14 +36,14 @@ public class Subscribe{
     private LocalDateTime expired_date; //만료일
 
     @Column(name = "canceled_data")
-    private LocalDateTime canceledData; // 결제 중단일
+    private LocalDateTime canceled_Date; // 결제 중단일
 
     @Builder
     public Subscribe(User user, LocalDateTime start_date, LocalDateTime expired_date, LocalDateTime canceled_data){
         this.user=user;
         this.start_date=start_date;
         this.expired_date=expired_date;
-        this.canceledData=canceled_data;
+        this.canceled_Date=canceled_data;
 
         this.setUser(user);
     }

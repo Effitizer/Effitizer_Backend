@@ -74,4 +74,32 @@ public class CategoryController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
+
+    /**
+     * 카테고리 조회
+     */
+    @GetMapping("/{category_id}")
+    public ResponseEntity<?> showCategory(@PathVariable("category_id") Long category_id) {
+        Category category = categoryService.findCategoryById(category_id);
+        return new ResponseEntity<>(new CategoryDTO(category), HttpStatus.OK);
+    }
+
+    /**
+     * 카테고리 수정
+     */
+    @PutMapping("/{category_id}/edit")
+    public ResponseEntity<?> editCategory(@PathVariable("category_id") Long category_id,
+                                          @RequestBody CategoryRequest categoryRequest) {
+        Category category = categoryService.editCategory(category_id, categoryRequest.getName());
+        return new ResponseEntity<>(new CategoryDTO(category), HttpStatus.OK);
+    }
+
+    /**
+     * 카테고리 삭제
+     */
+    @PatchMapping("/{category_id}/delete")
+    public ResponseEntity<?> deleteCategory(@PathVariable("category_id") Long category_id) {
+        categoryService.deleteCategory(category_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

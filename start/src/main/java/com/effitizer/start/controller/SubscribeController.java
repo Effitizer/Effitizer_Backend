@@ -3,7 +3,7 @@ package com.effitizer.start.controller;
 import com.effitizer.start.component.ReqPaymentScheduler;
 import com.effitizer.start.config.auth.dto.SessionUser;
 import com.effitizer.start.domain.*;
-import com.effitizer.start.domain.dto.Contents.ContentsDTO;
+import com.effitizer.start.domain.dto.Subscribe.Request.SubscribeRequest;
 import com.effitizer.start.domain.dto.Subscribe.SubscribeDTO;
 import com.effitizer.start.error.ErrorResponse;
 import com.effitizer.start.service.SubscribeService;
@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
@@ -25,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
-@RequestMapping("/test/api/subscribe")
+@RequestMapping("/api/subscribe")
 public class SubscribeController {
     @Autowired
     SubscribeService subscribeService;
@@ -131,6 +128,25 @@ public class SubscribeController {
             ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    /**
+     * Subscribe 구독 수정
+     */
+    @PutMapping("/{subscribe_id}")
+    public ResponseEntity<?> editSubscribe(@PathVariable("subscribe_id") Long subscribe_id,
+                                           @RequestBody SubscribeRequest subscribeRequest) {
+        Subscribe subscribe = subscribeService.editSubscribe(subscribe_id, subscribeRequest);
+        return new ResponseEntity<>(new SubscribeDTO(subscribe), HttpStatus.OK);
+    }
+
+    /**
+     * Subscribe 구독 삭제
+     */
+    @PatchMapping("/{subscribe_id}")
+    public ResponseEntity<?> deleteSubscribe(Long subscribe_id){
+        subscribeService.deleteSubscribe(subscribe_id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

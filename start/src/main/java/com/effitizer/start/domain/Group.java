@@ -26,10 +26,9 @@ public class Group extends BaseTimeEntity{
     @OneToMany(mappedBy = "group")
     public List<ContentsGroups> contents_groups = new ArrayList<>(); //책 id
 
-
-
     @Builder
     public Group(String title){
+
         this.title=title;
     }
 //    public Group(String title, List<Contents> contents) {

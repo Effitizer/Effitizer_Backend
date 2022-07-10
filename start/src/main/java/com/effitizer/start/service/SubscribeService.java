@@ -7,10 +7,12 @@ import com.effitizer.start.domain.Subscribe;
 import com.effitizer.start.domain.Subscribe;
 
 import com.effitizer.start.domain.User;
+import com.effitizer.start.domain.dto.Subscribe.Request.SubscribeRequest;
 import com.effitizer.start.repository.SubscribeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 import java.time.LocalDate;
@@ -90,8 +92,28 @@ public class SubscribeService {
      */
     public Subscribe updateExpire(Long subscribe_id){
         Subscribe subscribe = findSubscribeById(subscribe_id);
-        subscribe.setCanceledData(LocalDateTime.now());
+        subscribe.setCanceled_data(LocalDateTime.now());
         return subscribe;
+    }
+
+    /**
+     * Subscribe 구독 수정
+     */
+    public Subscribe editSubscribe(Long subscribe_id, SubscribeRequest subscribeRequest) {
+        Subscribe subscribe = findSubscribeById(subscribe_id);
+        subscribe.setStart_date(subscribeRequest.getStart_date());
+        subscribe.setExpired_date(subscribeRequest.getExpired_date());
+        subscribe.setCanceled_Date(subscribeRequest.getCanceled_date());
+        return subscribe;
+    }
+
+
+    /**
+     * Subscribe 구독 삭제
+     */
+    public void deleteSubscribe(Long subscribe_id) {
+        Subscribe subscribe = findSubscribeById(subscribe_id);
+        subscribeRepository.delete(subscribe);
     }
 
 }

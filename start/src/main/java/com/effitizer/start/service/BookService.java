@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class BookService {
@@ -56,5 +58,36 @@ public class BookService {
     public Book findBookByIsbn(String isbn){
         return bookRepository.findByIsbn(isbn)
                 .orElseThrow(() -> new IllegalStateException("책 정보가 올바르지 않습니다."));
+    }
+
+    /**
+     * Book 전체 조회
+     */
+    public List<Book> findAllBook() {
+        return bookRepository.findAll();
+    }
+
+    /**
+     * Book id 로 조회
+     */
+    public Book findBookById(Long book_id) {
+        return bookRepository.findById(book_id)
+                .orElse(null);
+    }
+
+    /**
+     * Book 수정
+     */
+    public Book editBook(Long book_id) {
+        Book book = findBookById(book_id);
+        return book;
+    }
+
+    /**
+     * Book 삭제
+     */
+    public void deleteBook(Long book_id) {
+        Book book = findBookById(book_id);
+        bookRepository.delete(book);
     }
 }

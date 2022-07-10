@@ -43,4 +43,21 @@ public class CategoryService {
     public List<Category> findCategorys() {
         return categoryRepository.findAll();
     }
+
+    /**
+     * 카테고리 수정
+     */
+    public Category editCategory(Long category_id, String name) {
+        Category category = findCategoryById(category_id);
+        category.setName(name);
+        return category;
+    }
+
+    /**
+     * 카테고리 카페
+     */
+    public void deleteCategory(Long category_id) {
+        Category category = findCategoryById(category_id);
+        categoryRepository.delete(category);
+    }
 }

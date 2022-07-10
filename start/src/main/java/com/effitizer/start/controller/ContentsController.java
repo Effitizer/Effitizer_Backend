@@ -12,6 +12,7 @@ import com.effitizer.start.domain.dto.Subscribe.SubscribeDTO;
 import com.effitizer.start.error.ErrorResponse;
 import com.effitizer.start.service.ContentsService;
 import com.effitizer.start.service.UserService;
+import com.effitizer.start.service.ViewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,10 @@ public class ContentsController {
     @Autowired UserService userService;
     @Autowired S3Uploader s3Uploader;
     @Autowired HttpSession httpSession;
+    @Autowired
+    ViewService viewService;
+
+
     /**
      * 콘텐츠 저장
      * ADMIN만 가능
@@ -74,7 +79,13 @@ public class ContentsController {
     public ResponseEntity<?> selectContent(@PathVariable("contents_id") Long contents_id) {
         try {
             log.info("Contents controller: api/contents/{contents_id}---------------------");
+            // contents 조회
             Contents contents = contentsService.findContentsById(contents_id);
+
+
+            // 조회수 증가
+            View view = viewService.saveView(contents);
+
             return ResponseEntity.ok(new ContentsDTO(contents));
         }
         catch (Exception e){
@@ -122,7 +133,9 @@ public class ContentsController {
     }
 
 
-    //콘텐츠 삭제
+    /**
+     * contents 삭제
+     */
     @PatchMapping("/{contents_id}/delete")
     public ResponseEntity<?> deleteContents(@PathVariable("contents_id")Long contents_id){
         try{
