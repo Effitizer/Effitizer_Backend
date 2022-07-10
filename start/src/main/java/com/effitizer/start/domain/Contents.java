@@ -38,10 +38,6 @@ public class Contents extends BaseTimeEntity{
     public String content; // 내용
 
     @ColumnDefault("0")
-    private Long view; // 조회수
-    private String isbn; // 국제표준도서번호
-
-    @ColumnDefault("0")
     private boolean isDeleted;//삭제여부
 
     @OneToMany(mappedBy = "contents", cascade = CascadeType.ALL)
@@ -54,7 +50,6 @@ public class Contents extends BaseTimeEntity{
     public Contents(User user, Book book, String title, String content) {
         this.title = title;
         this.content = content;
-
         this.setBook(book);
         this.setUser(user);
     }
