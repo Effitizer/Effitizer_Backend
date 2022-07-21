@@ -76,15 +76,18 @@ public class ContentsController {
      * 콘텐츠 id로 콘텐츠 조회
      */
     @GetMapping("/{contents_id}")
-    public ResponseEntity<?> selectContent(@PathVariable("contents_id") Long contents_id) {
+    public ResponseEntity<?> selectContent(@PathVariable("contents_id") Long contentsId) {
         try {
             log.info("Contents controller: api/contents/{contents_id}---------------------");
-            // contents 조회
-            Contents contents = contentsService.findContentsById(contents_id);
+            // Session
+            SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+            Long userId= userService.findUserByName(sessionUser.getName()).getId();
 
+            // contents 조회
+            Contents contents = contentsService.findContentsById(contentsId);
 
             // 조회수 증가
-            View view = viewService.saveView(contents);
+            View view = viewService.saveView(contents, userService.findUserById(userId));
 
             return ResponseEntity.ok(new ContentsDTO(contents));
         }
