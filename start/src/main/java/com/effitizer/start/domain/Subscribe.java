@@ -32,18 +32,16 @@ public class Subscribe{
     @OneToMany(mappedBy = "subscribe", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
 
-    private LocalDateTime start_date; //구독시작일
-    private LocalDateTime expired_date; //만료일
-
-    @Column(name = "canceled_data")
-    private LocalDateTime canceled_Date; // 결제 중단일
+    private LocalDateTime startDate; //구독시작일
+    private LocalDateTime expiredDate; //만료일
+    private LocalDateTime canceledDate; // 결제 중단일
 
     @Builder
-    public Subscribe(User user, LocalDateTime start_date, LocalDateTime expired_date, LocalDateTime canceled_data){
+    public Subscribe(User user, LocalDateTime start_date, LocalDateTime expired_date, LocalDateTime canceled_date){
         this.user=user;
-        this.start_date=start_date;
-        this.expired_date=expired_date;
-        this.canceled_Date=canceled_data;
+        this.startDate=start_date;
+        this.expiredDate=expired_date;
+        this.canceledDate=canceled_date;
 
         this.setUser(user);
     }

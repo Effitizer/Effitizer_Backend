@@ -19,13 +19,13 @@ public class Order extends BaseTimeEntity{
     @Column(name = "order_id")
     private Long id; //  id
 
-    private int order_num; // 책 순서
+    private int orderNum; // 책 순서
 
     @OneToOne(mappedBy = "order")
     private Contents contents;
 
-    public Order(int order_num, Contents contents) {
-        this.order_num = order_num;
+    public Order(int orderNum, Contents contents) {
+        this.orderNum = orderNum;
 
         setConsumer(contents);
     }

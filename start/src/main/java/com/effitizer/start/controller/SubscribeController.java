@@ -102,23 +102,24 @@ public class SubscribeController {
         }
 
     }
-    @PutMapping("/subscription/renew")
+    @PostMapping("/subscription/new")
     public ResponseEntity<?> saveSubscription(){
         try {
             SessionUser user = (SessionUser) httpSession.getAttribute("user");
             User user_info= userService.findUserByName(user.getName());
             Subscribe subscribe = subscribeService.findSubscribeByUserId(user_info.getId());
-
             LocalDateTime current = LocalDateTime.now();
-            if(subscribe.getExpired_date().isAfter(current)) //구독 진행중이지만 결제일을 연장하고 싶은 경우
+
+
+            if(subscribe!=null && subscribe.getExpiredDate().isAfter(current)) //구독 진행중이지만 결제일을 연장하고 싶은 경우
             {
-                subscribeService.updateOne(user_info,subscribe.getExpired_date());
+                subscribeService.updateOne(user_info,subscribe.getExpiredDate());
             }
             else{//구독이 만료되었지만 다시시작하거나 새로운 구독을 하는 경우
                 subscribeService.saveOne(user_info);
             }
 
-            return ResponseEntity.ok("Subscription Success ");
+            return ResponseEntity.ok(user_info.getId()+" Subscription Success ");
         }
         catch (IllegalStateException e) {
             ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
@@ -144,10 +145,28 @@ public class SubscribeController {
      * Subscribe 구독 삭제
      */
     @PatchMapping("/{subscribe_id}")
-    public ResponseEntity<?> deleteSubscribe(Long subscribe_id){
-        subscribeService.deleteSubscribe(subscribe_id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+    public ResponseEntity<?> deleteSubscribe(Long subscribe_id) {
+        try {
+            SessionUser user = (SessionUser) httpSession.getAttribute("user");
+            User user_info = userService.findUserByName(user.getName());
+            Role user_role = user_info.getRole();
+            if (user_role.equals(Role.ADMIN)) {// admin만 삭제가능
+                long id =subscribeService.deleteSubscribe(subscribe_id);
+                if(id==-1)
+                    return new ResponseEntity<>("Cannot find id", HttpStatus.BAD_REQUEST);
+                else
+                    return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Only admin can stop their subscription", HttpStatus.BAD_REQUEST);
 
+        }catch (IllegalStateException e) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        }
+        catch (Exception e){
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

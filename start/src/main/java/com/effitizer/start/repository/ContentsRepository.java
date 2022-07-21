@@ -13,8 +13,8 @@ import java.util.List;
 @Repository
 public interface ContentsRepository extends JpaRepository<Contents, Long> {
 
-    @Query("select c.book_id, sum(c.view) as sum_view from Contents c group by c.book3 ")
-    List<ContentsDataVO> findSumContentsViews();
+//    @Query("select c.book_id, sum(c.view) as sum_view from Contents c group by c.book3 ")
+//    List<ContentsDataVO> findSumContentsViews();
 
     Optional<Contents> findByIsDeletedFalseAndId(Long contents_id);
     Page<Contents> findByIsDeletedFalse(Pageable pageable);

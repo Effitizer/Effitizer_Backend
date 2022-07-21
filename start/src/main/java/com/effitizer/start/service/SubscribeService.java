@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 @Service
@@ -82,8 +83,8 @@ public class SubscribeService {
      */
     public Subscribe updateSubscribe(String userEmail){
         User user = userService.findUserByEmail(userEmail);
-        Subscribe subscribe = subscribeRepository.findByUserOrderByCanceledDataDesc(user).get(0);
-        subscribe.setExpired_date(subscribe.getExpired_date().plusDays(30));
+        Subscribe subscribe = subscribeRepository.findByUserOrderByCanceledDateDesc(user).get(0);
+        subscribe.setExpiredDate(subscribe.getExpiredDate().plusDays(30));
         return subscribe;
     }
 
@@ -92,7 +93,7 @@ public class SubscribeService {
      */
     public Subscribe updateExpire(Long subscribe_id){
         Subscribe subscribe = findSubscribeById(subscribe_id);
-        subscribe.setCanceled_data(LocalDateTime.now());
+        subscribe.setCanceledDate(LocalDateTime.now());
         return subscribe;
     }
 
@@ -101,9 +102,9 @@ public class SubscribeService {
      */
     public Subscribe editSubscribe(Long subscribe_id, SubscribeRequest subscribeRequest) {
         Subscribe subscribe = findSubscribeById(subscribe_id);
-        subscribe.setStart_date(subscribeRequest.getStart_date());
-        subscribe.setExpired_date(subscribeRequest.getExpired_date());
-        subscribe.setCanceled_Date(subscribeRequest.getCanceled_date());
+        subscribe.setStartDate(subscribeRequest.getStart_date());
+        subscribe.setExpiredDate(subscribeRequest.getExpired_date());
+        subscribe.setCanceledDate(subscribeRequest.getCanceled_date());
         return subscribe;
     }
 
@@ -111,9 +112,13 @@ public class SubscribeService {
     /**
      * Subscribe 구독 삭제
      */
-    public void deleteSubscribe(Long subscribe_id) {
+    public long deleteSubscribe(Long subscribe_id) {
         Subscribe subscribe = findSubscribeById(subscribe_id);
-        subscribeRepository.delete(subscribe);
+        if(subscribe!=null){
+            subscribeRepository.delete(subscribe);
+            return subscribe_id;
+        }
+        return -1;
     }
 
 }

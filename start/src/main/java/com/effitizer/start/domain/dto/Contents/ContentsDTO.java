@@ -24,7 +24,7 @@ public class ContentsDTO {
 
     public ContentsDTO(Contents contents) {
         this.id = contents.getId();
-        this.book_order = contents.getOrder().getOrder_num();
+        this.book_order = contents.getOrder().getOrderNum();
         this.title = contents.getTitle();
         this.content = contents.getContent();
         this.updateDate = contents.getModifiedDate();
@@ -32,7 +32,7 @@ public class ContentsDTO {
 
     public ContentsDTO(Contents contents, List<ContentsContentsfileDTO> contentsContentsfileDTOs) {
         this.id = contents.getId();
-        this.book_order = contents.getOrder().getOrder_num();
+        this.book_order = contents.getOrder().getOrderNum();
         this.title = contents.getTitle();
         this.content = contents.getContent();
         this.imageURLs = contentsContentsfileDTOs;
@@ -43,7 +43,7 @@ public class ContentsDTO {
     public Page<ContentsDTO> toDtoList(Page<Contents> contentsList){
         Page<ContentsDTO> boardDtoList = contentsList.map(m ->ContentsDTO.builder()
                 .id(m.getId())
-                .book_order(m.getOrder().getOrder_num())
+                .book_order(m.getOrder().getOrderNum())
                 .title(m.getTitle())
                 .content(m.getContent())
                 .updateDate(m.getModifiedDate())
