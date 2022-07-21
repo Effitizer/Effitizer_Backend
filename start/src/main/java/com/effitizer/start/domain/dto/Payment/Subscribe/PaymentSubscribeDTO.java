@@ -14,6 +14,7 @@ public class PaymentSubscribeDTO {
 
     public PaymentSubscribeDTO (Subscribe subscribe) {
         this. subscribe_id = subscribe.getId();
-        this.start_date = subscribe.getStart_date();
+        this.start_date = subscribe.getStartDate();
     }
 }
+
