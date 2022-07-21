@@ -36,6 +36,10 @@ public class User extends BaseTimeEntity{
     private List<Subscribe> subscribes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonBackReference //순환참조 방지
+    private List<View> views = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
     private List<UserHistory> user_historys = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
