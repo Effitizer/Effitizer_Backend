@@ -61,7 +61,7 @@ public class RequestLoggingAspect {
         long start = System.currentTimeMillis();
         try {
             Authentication auth= SecurityContextHolder.getContext().getAuthentication();
-            String username=auth.getName();
+            String username= auth.getName();
             System.out.println("current user: "+username);
 
             SimpleDateFormat formatter = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss", Locale.KOREA );
@@ -74,12 +74,12 @@ public class RequestLoggingAspect {
 
             UserHistory userhistory = new UserHistory();
 
-            userhistory.setAccess_path(accessPath);			//로그인시
-            userhistory.setIp_address(request.getRemoteAddr());//아이피주소
+            userhistory.setAccessPath(accessPath);			//로그인시
+            userhistory.setIpAddress(request.getRemoteAddr());//아이피주소
 
-            userhistory.setLogin_date(initTime);			//초기접속시간
-            userhistory.setSession_lastaccess(lastTime);	//마지막접속시간
-            userhistory.setOs_type(request.getHeader("User-Agent"));
+            userhistory.setLoginDate(initTime);			//초기접속시간
+            userhistory.setSessionLastaccess(lastTime);	//마지막접속시간
+            userhistory.setOsType(request.getHeader("User-Agent"));
 
 //            if(!(username.equals("anonymousUser"))) {//사용자의 정보를 가져올 수 있는 경우
 //                Optional<User> findUser = userRepository.findByNickname(username);

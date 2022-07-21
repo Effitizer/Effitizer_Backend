@@ -70,7 +70,7 @@ public class BookController {
     @PutMapping("/{book_id}")
     public ResponseEntity<?> editBook(@PathVariable("book_id") Long book_id) {
         Book book = bookService.editBook(book_id);
-
+        return ResponseEntity.ok(new BookDTO(book, book.getBookcoverfile()));
     }
 
     /**
