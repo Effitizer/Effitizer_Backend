@@ -102,16 +102,15 @@ public class SubscribeController {
         }
 
     }
-    @PostMapping("/subscription/new")
+    @PutMapping("/subscription/renew")
     public ResponseEntity<?> saveSubscription(){
         try {
             SessionUser user = (SessionUser) httpSession.getAttribute("user");
             User user_info= userService.findUserByName(user.getName());
             Subscribe subscribe = subscribeService.findSubscribeByUserId(user_info.getId());
+
             LocalDateTime current = LocalDateTime.now();
-
-
-            if(subscribe!=null && subscribe.getExpiredDate().isAfter(current)) //구독 진행중이지만 결제일을 연장하고 싶은 경우
+            if(subscribe.getExpiredDate().isAfter(current)) //구독 진행중이지만 결제일을 연장하고 싶은 경우
             {
                 subscribeService.updateOne(user_info,subscribe.getExpiredDate());
             }
@@ -119,7 +118,7 @@ public class SubscribeController {
                 subscribeService.saveOne(user_info);
             }
 
-            return ResponseEntity.ok(user_info.getId()+" Subscription Success ");
+            return ResponseEntity.ok("Subscription Success ");
         }
         catch (IllegalStateException e) {
             ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
@@ -145,28 +144,10 @@ public class SubscribeController {
      * Subscribe 구독 삭제
      */
     @PatchMapping("/{subscribe_id}")
-    public ResponseEntity<?> deleteSubscribe(Long subscribe_id) {
-        try {
-            SessionUser user = (SessionUser) httpSession.getAttribute("user");
-            User user_info = userService.findUserByName(user.getName());
-            Role user_role = user_info.getRole();
-            if (user_role.equals(Role.ADMIN)) {// admin만 삭제가능
-                long id =subscribeService.deleteSubscribe(subscribe_id);
-                if(id==-1)
-                    return new ResponseEntity<>("Cannot find id", HttpStatus.BAD_REQUEST);
-                else
-                    return new ResponseEntity<>(HttpStatus.OK);
-            }
-            return new ResponseEntity<>("Only admin can stop their subscription", HttpStatus.BAD_REQUEST);
-
-        }catch (IllegalStateException e) {
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage());
-            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
-        }
-        catch (Exception e){
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> deleteSubscribe(Long subscribe_id){
+        subscribeService.deleteSubscribe(subscribe_id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
 }

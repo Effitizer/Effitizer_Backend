@@ -27,17 +27,15 @@ public class PublisherService {
     /**
      * id로 출판자 조회
      */
-    public Publisher findPublisherById(Long publisherId) {
-        Optional<Publisher> publisher= publisherRepository.findById(publisherId);
-        if(publisher.isEmpty() || publisher.get().isDeleted())
-            throw new IllegalStateException("존재하지 않는 데이터 입니다.");
-        return publisher.get();
+    public Publisher findPublisherById(Long publisherId) throws Exception{
+        return publisherRepository.findById(publisherId)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 데이터 입니다."));
     }
 
     /**
      * 출판사 저장
      */
-    public Publisher savePublisher(String publisherName) {
+    public Publisher savePublisher(String publisherName) throws Exception{
         // 중복 데이터 검사
         publisherRepository.findByName(publisherName)
                 .ifPresent(p -> {
@@ -50,7 +48,7 @@ public class PublisherService {
         return publisher;
     }
 
-    public Publisher editPublisher(String publisherName, Long id) {
+    public Publisher editPublisher(String publisherName, Long id) throws Exception{
         // 중복 데이터 검사
          publisherRepository.findByName(publisherName)
                 .ifPresent(p -> {
@@ -63,14 +61,21 @@ public class PublisherService {
          return publisher;
     }
 
+    /**
+     * Publisher가 없다면 저장하고 있다면 그 entity를 반환
+     */
     public Publisher savePublisherOrFind(String publisher_name) {
-        Optional<Publisher> findPublisher = publisherRepository.findByName(publisher_name);
-        if (findPublisher.isEmpty()) {
+        Publisher findPublisher = publisherRepository.findByName(publisher_name)
+                .orElse(null);
+        if (findPublisher == null) {
+            // 존재하지 않는 경우 생성
             Publisher publisher = new Publisher(publisher_name);
             publisherRepository.save(publisher);
             return publisher;
+        }else {
+            // 존재하는 경우 생성
+            return findPublisher;
         }
-        return findPublisher.get();
     }
 
     public List<Publisher> findAll(){

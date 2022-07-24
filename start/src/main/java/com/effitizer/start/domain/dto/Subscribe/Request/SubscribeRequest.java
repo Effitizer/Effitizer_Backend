@@ -1,6 +1,5 @@
 package com.effitizer.start.domain.dto.Subscribe.Request;
 
-import jdk.vm.ci.meta.Local;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
