@@ -12,14 +12,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.amazonaws.services.s3.internal.crypto.CipherLite.Null;
-
 @Service
 @Transactional
 public class ViewService {
     @Autowired
     ViewRepository viewRepository;
-
     @Autowired ContentsService contentsService;
 
     /**
@@ -55,7 +52,7 @@ public class ViewService {
             viewRepository.save(view);
             return view;
         }
-        return viewList.get(0)
+        return viewList.get(0);
     }
 
     /*

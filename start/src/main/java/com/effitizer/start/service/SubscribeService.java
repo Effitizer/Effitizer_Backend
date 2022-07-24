@@ -62,8 +62,8 @@ public class SubscribeService {
         LocalDateTime nowTime = LocalDateTime.now();
         Subscribe subscribe = Subscribe.builder()
                 .user(user)
-                .start_date(nowTime)
-                .expired_date(nowTime.plusDays(30))
+                .startDate(nowTime)
+                .expiredDate(nowTime.plusDays(30))
                 .build();
         subscribeRepository.save(subscribe);
         return subscribe;
@@ -83,7 +83,7 @@ public class SubscribeService {
     public Subscribe updateSubscribe(String userEmail){
         User user = userService.findUserByEmail(userEmail);
         Subscribe subscribe = subscribeRepository.findByUserOrderByCanceledDataDesc(user).get(0);
-        subscribe.setExpired_date(subscribe.getExpired_date().plusDays(30));
+        subscribe.setExpiredDate(subscribe.getExpiredDate().plusDays(30));
         return subscribe;
     }
 
@@ -92,7 +92,7 @@ public class SubscribeService {
      */
     public Subscribe updateExpire(Long subscribe_id){
         Subscribe subscribe = findSubscribeById(subscribe_id);
-        subscribe.setCanceled_data(LocalDateTime.now());
+        subscribe.setCanceledDate(LocalDateTime.now());
         return subscribe;
     }
 
@@ -101,9 +101,9 @@ public class SubscribeService {
      */
     public Subscribe editSubscribe(Long subscribe_id, SubscribeRequest subscribeRequest) {
         Subscribe subscribe = findSubscribeById(subscribe_id);
-        subscribe.setStart_date(subscribeRequest.getStart_date());
-        subscribe.setExpired_date(subscribeRequest.getExpired_date());
-        subscribe.setCanceled_Date(subscribeRequest.getCanceled_date());
+        subscribe.setStartDate(subscribeRequest.getStart_date());
+        subscribe.setExpiredDate(subscribeRequest.getExpired_date());
+        subscribe.setCanceledDate(subscribeRequest.getCanceled_date());
         return subscribe;
     }
 

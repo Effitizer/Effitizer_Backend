@@ -27,8 +27,8 @@ public class SubscribeDTO {
     public SubscribeDTO(Subscribe subscribe) {
         this.id=subscribe.getId();
         this.user_id=subscribe.getUser().getId();
-        this.start_date=subscribe.getStart_date();
-        this.expired_date=subscribe.getExpired_date();
-        this.canceled_data=subscribe.getCanceledData();
+        this.start_date=subscribe.getStartDate();
+        this.expired_date=subscribe.getExpiredDate();
+        this.canceled_data=subscribe.getCanceledDate();
     }
 }
