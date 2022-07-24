@@ -40,7 +40,7 @@ public class User extends BaseTimeEntity{
     private List<View> views = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<UserHistory> user_historys = new ArrayList<>();
+    private List<UserHistory> userHistorys = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "user")

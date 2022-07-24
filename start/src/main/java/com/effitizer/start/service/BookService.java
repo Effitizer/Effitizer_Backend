@@ -5,6 +5,7 @@ import com.effitizer.start.domain.dto.Book.Request.BookRequest;
 import com.effitizer.start.repository.BookRepository;
 import com.effitizer.start.repository.CategoryRepository;
 import com.effitizer.start.repository.UserRepository;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class BookService {
     /**
      * Book 저장
      */
+    @SneakyThrows
     public Book saveBook(BookRequest bookRequest) {
         // 동일한 isbn이 있는지 조회
         Book checkBook = bookRepository.findByIsbn(bookRequest.getIsbn())

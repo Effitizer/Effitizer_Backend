@@ -60,19 +60,16 @@ public class GroupService {
                 .orElseThrow(() -> new IllegalStateException("그룹 정보가 올바르지 않습니다"));
         return group;
     }
-
-
+    
     public Group editGroup(GroupDTO groupDTO) {
-        Group group = groupRepository.findById(groupDTO.getId())
-                .orElseThrow(() -> new IllegalStateException("그룹 정보가 올바르지 않습니다"));
+        Group group = findGroupById(groupDTO.getId());
         group.setTitle(groupDTO.getTitle());
 
         return group;
     }
 
     public Long deleteGroup(long group_id){
-        Group group = groupRepository.findById(group_id)
-                .orElseThrow(() -> new IllegalStateException("그룹 정보가 올바르지 않습니다"));
+        Group group = findGroupById(group_id);
         groupRepository.delete(group);
         return group_id;
     }
