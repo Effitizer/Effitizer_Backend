@@ -54,7 +54,7 @@ public class ContentsService {
         User user = userService.findUserById(onlyContentsRequest.getUser_id());
         contents.setUser(user);
         Order order = contents.getOrder();
-        order.setOrder_num(onlyContentsRequest.getBook_order());
+        order.setOrderNum(onlyContentsRequest.getBook_order());
         contents.setTitle(onlyContentsRequest.getTitle());
         contents.setContent(onlyContentsRequest.getContent());
         return contents;

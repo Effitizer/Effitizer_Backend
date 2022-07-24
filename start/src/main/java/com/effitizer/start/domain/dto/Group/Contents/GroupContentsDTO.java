@@ -21,7 +21,7 @@ public class GroupContentsDTO {
     public GroupContentsDTO(Contents contents){
         this.id = contents.getId();
         this.title = contents.getTitle();
-        this.order = contents.getOrder().getOrder_num();
+        this.order = contents.getOrder().getOrderNum();
         this.book = new GroupBookDTO(contents.getBook());
     }
 }

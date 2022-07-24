@@ -24,7 +24,7 @@ public class OnlyContentsRequest {
     public OnlyContentsRequest(Contents contents) {
         this.id = contents.getId();
         this.user_id = contents.getUser().getId();
-        this.book_order = contents.getOrder().getOrder_num();
+        this.book_order = contents.getOrder().getOrderNum();
         this.title = contents.getTitle();
         this.content = contents.getContent();
         this.imageURL = contents.getContentsfiles().toString();

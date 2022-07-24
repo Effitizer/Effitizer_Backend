@@ -29,7 +29,7 @@ public class User extends BaseTimeEntity{
     private Role role;
 
     @Column(nullable = false)
-    private Boolean is_subscribed = false; //구독여부
+    private Boolean isSubscribed = false; //구독여부
 
     @OneToMany(mappedBy = "user")
     @JsonBackReference //순환참조 방지
@@ -41,6 +41,7 @@ public class User extends BaseTimeEntity{
 
     @OneToMany(mappedBy = "user")
     private List<UserHistory> user_historys = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "user")
     private List<Contents> contents = new ArrayList<>();
@@ -76,7 +77,7 @@ public class User extends BaseTimeEntity{
     }
 
     public void setUser_history(UserHistory user_history) {
-        this.user_historys.add(user_history);
+        this.userHistorys.add(user_history);
         user_history.setUser(this);
     }
 
